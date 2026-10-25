@@ -1,0 +1,1854 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Describing and Admiring Things</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+    
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+                        body: ['Inter', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50: '#f0f9ff',
+                            100: '#e0f2fe',
+                            500: '#0ea5e9',
+                            600: '#0284c7',
+                            700: '#0369a1',
+                            900: '#0c4a6e',
+                        },
+                        accent: {
+                            500: '#8b5cf6', 
+                            600: '#7c3aed',
+                        },
+                        navy: {
+                            50: '#f0f4f8',
+                            100: '#d9e2ec',
+                            400: '#829ab1',
+                            600: '#334e68',
+                            700: '#243b53',
+                            800: '#102a43',
+                            900: '#0a192f',
+                            950: '#061020'
+                        },
+                        surface: '#ffffff',
+                        background: '#f8fafc',
+                    },
+                    boxShadow: {
+                        'soft': '0 10px 40px -10px rgba(0,0,0,0.05)',
+                        'glow': '0 0 20px rgba(14, 165, 233, 0.4)',
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        body {
+            background-color: theme('colors.background');
+            color: #334155;
+            -webkit-font-smoothing: antialiased;
+            -moz-osx-font-smoothing: grayscale;
+        }
+        
+        .fade-in {
+            animation: fadeIn 0.5s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+        }
+        
+        .fade-up {
+            animation: fadeUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            opacity: 0;
+            transform: translateY(20px);
+        }
+
+        .stagger-1 { animation-delay: 0.1s; }
+        .stagger-2 { animation-delay: 0.2s; }
+        .stagger-3 { animation-delay: 0.3s; }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .hide-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .hide-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+
+        .nav-button {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .nav-button::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 50%;
+            width: 0;
+            height: 3px;
+            background-color: theme('colors.blue.400');
+            transition: all 0.3s ease;
+            transform: translateX(-50%);
+            border-radius: 2px;
+        }
+        .nav-button.active {
+            color: theme('colors.white');
+            font-weight: 600;
+        }
+        .nav-button.active::after {
+            width: 100%;
+        }
+
+        .hover-card {
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .hover-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px -15px rgba(0,0,0,0.05);
+        }
+
+        @keyframes float {
+            0% { transform: translateY(0px); }
+            50% { transform: translateY(-20px); }
+            100% { transform: translateY(0px); }
+        }
+        .animate-float {
+            animation: float 6s ease-in-out infinite;
+        }
+        .animate-float-delayed {
+            animation: float 6s ease-in-out 3s infinite;
+        }
+
+        .bg-dotted {
+            background-image: radial-gradient(theme('colors.slate.300') 1px, transparent 1px);
+            background-size: 24px 24px;
+        }
+
+        .card-accent-navy {
+            border-top: 4px solid theme('colors.navy.800');
+        }
+        
+        .subtab-btn {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+<body class="overflow-x-hidden bg-slate-50 bg-dotted flex flex-col min-h-screen">
+
+    <div id="landing-page" class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-navy-950 text-white transition-all duration-700 ease-in-out overflow-hidden">
+        <div class="absolute inset-0 overflow-hidden pointer-events-none">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[80vw] h-[80vw] max-w-[800px] max-h-[800px] bg-blue-600/20 rounded-full blur-[120px] mix-blend-screen"></div>
+            <div class="absolute bottom-0 right-0 w-[60vw] h-[60vw] max-w-[600px] max-h-[600px] bg-accent-600/10 rounded-full blur-[100px] mix-blend-screen"></div>
+            <div class="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCI+CjxyZWN0IHdpZHRoPSI0MCIgaGVpZ2h0PSI0MCIgZmlsbD0ibm9uZSIvPgo8cGF0aCBkPSJNMCA0MEwwIDAgNDAgMCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJyZ2JhKDI1NSwyNTUsMjU1LDAuMDMpIiBzdHJva2Utd2lkdGg9IjEiLz4KPC9zdmc+')] opacity-50"></div>
+        </div>
+
+        <div class="absolute hidden lg:flex flex-col gap-4 left-[10%] top-[30%] animate-float pointer-events-none">
+            <div class="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl shadow-2xl flex items-center gap-3 transform -rotate-6">
+                <div class="w-10 h-10 rounded-full bg-blue-500/20 flex items-center justify-center text-blue-300"><i class="fas fa-star"></i></div>
+                <div>
+                    <div class="text-xs text-slate-400">Compliments</div>
+                    <div class="text-sm font-semibold">"What a beautiful day!"</div>
+                </div>
+            </div>
+        </div>
+        <div class="absolute hidden lg:flex flex-col gap-4 right-[10%] top-[40%] animate-float-delayed pointer-events-none">
+            <div class="bg-white/5 backdrop-blur-md border border-white/10 p-4 rounded-2xl shadow-2xl flex items-center gap-3 transform rotate-3">
+                <div class="w-10 h-10 rounded-full bg-accent-500/20 flex items-center justify-center text-accent-300"><i class="fas fa-question"></i></div>
+                <div>
+                    <div class="text-xs text-slate-400">Question Tags</div>
+                    <div class="text-sm font-semibold">"It's great, isn't it?"</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="relative z-10 text-center px-6 max-w-5xl mx-auto flex flex-col items-center">
+            <div class="fade-up stagger-1 mb-8 inline-flex items-center justify-center px-5 py-2 rounded-full bg-blue-900/40 backdrop-blur-md border border-blue-400/20 shadow-[0_0_20px_rgba(59,130,246,0.1)]">
+                <span class="w-2 h-2 rounded-full bg-blue-400 animate-pulse mr-3"></span>
+                <span class="text-sm font-bold tracking-widest uppercase text-blue-200">English for 9th Grade</span>
+            </div>
+            
+            <h1 class="fade-up stagger-2 text-6xl md:text-7xl lg:text-8xl font-extrabold mb-8 tracking-tight leading-[1.1]">
+                <span class="text-white">Describing and</span> <br>
+                <span class="bg-gradient-to-r from-blue-300 via-blue-100 to-white bg-clip-text text-transparent">Admiring Things</span>
+            </h1>
+            
+            <p class="fade-up stagger-3 text-lg md:text-xl text-slate-400 mb-12 font-body font-light max-w-2xl mx-auto leading-relaxed">
+                Elevate your English. Learn to craft vivid descriptions, give genuine compliments, and express emotions with confidence.
+            </p>
+            
+            <button onclick="startLearning()" class="fade-up stagger-3 group relative px-8 py-4 bg-white text-navy-950 font-bold rounded-full text-lg shadow-[0_0_40px_rgba(255,255,255,0.2)] hover:shadow-[0_0_60px_rgba(255,255,255,0.4)] hover:bg-slate-50 transition-all duration-300 transform hover:-translate-y-1 flex items-center overflow-hidden">
+                <span class="relative z-10">Start Learning Module</span>
+                <div class="relative z-10 ml-4 w-8 h-8 rounded-full bg-navy-100 flex items-center justify-center group-hover:bg-blue-100 transition-colors">
+                    <i class="fas fa-arrow-right text-sm text-navy-900 group-hover:translate-x-1 transition-all"></i>
+                </div>
+            </button>
+        </div>
+    </div>
+
+    <div id="main-app" class="hidden min-h-screen flex flex-col opacity-0 flex-1">
+        <header class="bg-navy-900 text-white sticky top-0 z-40 shadow-lg border-b border-navy-800">
+            <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div class="py-4 flex items-center justify-between">
+                    <div class="flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-xl bg-white/10 flex items-center justify-center shadow-inner border border-white/10">
+                            <i class="fas fa-book-open text-white text-xl"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-xl font-bold text-white leading-tight">Describing and Admiring Things</h2>
+                            <p class="text-sm text-blue-200 font-medium">English for 9th Grade</p>
+                        </div>
+                    </div>
+                    
+                    <button onclick="location.reload()" class="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium text-blue-100 hover:bg-white/10 transition-colors">
+                        <i class="fas fa-home"></i> <span class="hidden sm:inline">Home</span>
+                    </button>
+                </div>
+                
+                <nav class="flex overflow-x-auto hide-scrollbar py-1 gap-6 border-t border-white/10" id="main-nav">
+                    <button onclick="switchTab('tab-intro')" class="nav-button active py-3 whitespace-nowrap text-sm font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fas fa-bullseye opacity-70"></i> Objectives
+                    </button>
+                    <button onclick="switchTab('tab-descriptive')" class="nav-button py-3 whitespace-nowrap text-sm font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fas fa-file-alt opacity-70"></i> Descriptive Text
+                    </button>
+                    <button onclick="switchTab('tab-examples')" class="nav-button py-3 whitespace-nowrap text-sm font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fas fa-images opacity-70"></i> Examples
+                    </button>
+                    <button onclick="switchTab('tab-tags')" class="nav-button py-3 whitespace-nowrap text-sm font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fas fa-question-circle opacity-70"></i> Question Tags
+                    </button>
+                    <button onclick="switchTab('tab-compliments')" class="nav-button py-3 whitespace-nowrap text-sm font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fas fa-star opacity-70"></i> Compliments & Expressions
+                    </button>
+                    <button onclick="switchTab('tab-summary')" class="nav-button py-3 whitespace-nowrap text-sm font-medium text-slate-300 hover:text-white transition-colors flex items-center gap-2">
+                        <i class="fas fa-link opacity-70"></i> Integration
+                    </button>
+                </nav>
+            </div>
+        </header>
+
+        <main class="flex-grow max-w-7xl mx-auto w-full p-4 sm:p-6 lg:p-8 pb-28 font-body relative">
+            <div class="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[300px] bg-navy-900/5 blur-3xl rounded-full pointer-events-none -z-10"></div>
+            
+            <div id="tab-intro" class="tab-content fade-in">
+                <div class="bg-surface rounded-3xl shadow-xl card-accent-navy border border-slate-100 p-6 md:p-10 relative overflow-hidden">
+                    <i class="fas fa-bullseye absolute -bottom-10 -right-10 text-[15rem] text-slate-50 opacity-60 pointer-events-none z-0"></i>
+                    
+                    <div class="flex flex-col lg:flex-row gap-10 items-start relative z-10">
+                        <div class="lg:w-1/3 sticky top-6">
+                            <div class="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-primary-50 text-primary-600 mb-6 border border-primary-100">
+                                <i class="fas fa-list-check text-2xl"></i>
+                            </div>
+                            <h2 class="text-3xl font-bold text-navy-900 mb-4 font-sans tracking-tight">Learning Objectives</h2>
+                            <p class="text-slate-500 mb-6 leading-relaxed text-lg">Mastering these concepts will allow you to communicate vivid descriptions and genuine reactions in English.</p>
+                            <div class="w-16 h-1.5 bg-gradient-to-r from-primary-500 to-accent-500 rounded-full"></div>
+                        </div>
+                        
+                        <div class="lg:w-2/3 grid sm:grid-cols-2 gap-4 w-full">
+                            <div class="flex items-start bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover-card">
+                                <div class="w-8 h-8 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center shrink-0 mr-4 font-bold border border-primary-100">1</div>
+                                <span class="text-slate-700 text-sm font-medium pt-1">Identify the purpose and structure of a descriptive text.</span>
+                            </div>
+                            <div class="flex items-start bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover-card">
+                                <div class="w-8 h-8 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center shrink-0 mr-4 font-bold border border-primary-100">2</div>
+                                <span class="text-slate-700 text-sm font-medium pt-1">Describe a particular person, animal, place, or thing.</span>
+                            </div>
+                            <div class="flex items-start bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover-card">
+                                <div class="w-8 h-8 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center shrink-0 mr-4 font-bold border border-primary-100">3</div>
+                                <span class="text-slate-700 text-sm font-medium pt-1">Use adjectives and noun groups for detailed descriptions.</span>
+                            </div>
+                            <div class="flex items-start bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover-card">
+                                <div class="w-8 h-8 rounded-full bg-primary-50 text-primary-600 flex items-center justify-center shrink-0 mr-4 font-bold border border-primary-100">4</div>
+                                <span class="text-slate-700 text-sm font-medium pt-1">Use the simple present tense in descriptive texts.</span>
+                            </div>
+                            <div class="flex items-start bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover-card">
+                                <div class="w-8 h-8 rounded-full bg-accent-50 text-accent-600 flex items-center justify-center shrink-0 mr-4 font-bold border border-accent-100">5</div>
+                                <span class="text-slate-700 text-sm font-medium pt-1">Use question tags to ask for confirmation naturally.</span>
+                            </div>
+                            <div class="flex items-start bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover-card">
+                                <div class="w-8 h-8 rounded-full bg-accent-50 text-accent-600 flex items-center justify-center shrink-0 mr-4 font-bold border border-accent-100">6</div>
+                                <span class="text-slate-700 text-sm font-medium pt-1">Give compliments appropriately to others.</span>
+                            </div>
+                            <div class="flex items-start bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover-card">
+                                <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mr-4 font-bold border border-emerald-100">7</div>
+                                <span class="text-slate-700 text-sm font-medium pt-1">Use exclamatory sentences to express strong feelings.</span>
+                            </div>
+                            <div class="flex items-start bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover-card">
+                                <div class="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mr-4 font-bold border border-emerald-100">8</div>
+                                <span class="text-slate-700 text-sm font-medium pt-1">Use interjections to express spontaneous emotions.</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-descriptive" class="tab-content hidden">
+                <div class="space-y-8">
+                    <div class="bg-surface rounded-3xl shadow-xl card-accent-navy border border-slate-100 overflow-hidden relative">
+                        <i class="fas fa-file-alt absolute -top-10 -right-10 text-[10rem] text-slate-50 opacity-50 pointer-events-none z-0"></i>
+                        <div class="p-8 md:p-10 relative z-10">
+                            <h2 class="text-2xl font-bold text-navy-900 mb-4 font-sans flex items-center gap-3">
+                                <span class="bg-navy-100 text-navy-800 w-10 h-10 flex items-center justify-center rounded-lg text-lg">A</span>
+                                What Is a Descriptive Text?
+                            </h2>
+                            <p class="text-slate-600 mb-6 text-lg">A descriptive text describes a <strong class="text-navy-700 font-semibold">particular</strong> person, animal, place, or thing.</p>
+                            
+                            <div class="bg-navy-50 border-l-4 border-navy-500 p-5 rounded-r-xl mb-8">
+                                <p class="text-navy-900 font-medium">Its purpose is to give detailed information about the subject so that the reader can identify and imagine it clearly.</p>
+                            </div>
+                            
+                            <h3 class="font-semibold text-slate-800 mb-4 text-sm uppercase tracking-wider">Common Subjects</h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+                                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center text-center">
+                                    <div class="w-12 h-12 rounded-full bg-blue-50 flex items-center justify-center mb-3">
+                                        <i class="fas fa-user text-xl text-blue-500"></i>
+                                    </div>
+                                    <div class="font-bold text-slate-800">People</div>
+                                    <div class="text-xs text-slate-500 mt-1">Mother, Friend</div>
+                                </div>
+                                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center text-center">
+                                    <div class="w-12 h-12 rounded-full bg-orange-50 flex items-center justify-center mb-3">
+                                        <i class="fas fa-paw text-xl text-orange-500"></i>
+                                    </div>
+                                    <div class="font-bold text-slate-800">Animals</div>
+                                    <div class="text-xs text-slate-500 mt-1">My Cat, Rabbit</div>
+                                </div>
+                                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center text-center">
+                                    <div class="w-12 h-12 rounded-full bg-emerald-50 flex items-center justify-center mb-3">
+                                        <i class="fas fa-map-marker-alt text-xl text-emerald-500"></i>
+                                    </div>
+                                    <div class="font-bold text-slate-800">Places</div>
+                                    <div class="text-xs text-slate-500 mt-1">School, Bedroom</div>
+                                </div>
+                                <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm flex flex-col items-center text-center">
+                                    <div class="w-12 h-12 rounded-full bg-purple-50 flex items-center justify-center mb-3">
+                                        <i class="fas fa-box text-xl text-purple-500"></i>
+                                    </div>
+                                    <div class="font-bold text-slate-800">Things</div>
+                                    <div class="text-xs text-slate-500 mt-1">Backpack, Bike</div>
+                                </div>
+                            </div>
+
+                            <div class="bg-amber-50 rounded-2xl p-6 border border-amber-100 relative overflow-hidden">
+                                <div class="absolute -right-4 -top-4 text-amber-500/10 text-9xl"><i class="fas fa-exclamation-circle"></i></div>
+                                <h4 class="font-bold text-amber-900 flex items-center mb-4 relative z-10">
+                                    <i class="fas fa-lightbulb text-amber-500 mr-2"></i> Crucial Distinction
+                                </h4>
+                                <p class="text-amber-800 text-sm mb-4 relative z-10">A descriptive text focuses on a <strong>particular</strong> subject, not a general one.</p>
+                                
+                                <div class="space-y-3 relative z-10">
+                                    <div class="flex items-start bg-white p-4 rounded-xl border border-red-100 shadow-sm">
+                                        <div class="w-6 h-6 rounded-full bg-red-100 flex items-center justify-center shrink-0 mr-3 mt-0.5"><i class="fas fa-times text-red-500 text-xs"></i></div>
+                                        <div>
+                                            <p class="text-slate-800 text-sm font-medium">Cats are small animals. They have four legs...</p>
+                                            <p class="text-xs text-slate-500 mt-1">Describes cats in general (Report Text).</p>
+                                        </div>
+                                    </div>
+                                    <div class="flex items-start bg-white p-4 rounded-xl border border-emerald-100 shadow-sm">
+                                        <div class="w-6 h-6 rounded-full bg-emerald-100 flex items-center justify-center shrink-0 mr-3 mt-0.5"><i class="fas fa-check text-emerald-500 text-xs"></i></div>
+                                        <div>
+                                            <p class="text-slate-800 text-sm font-medium">My cat, Milo, is a small and playful cat. He has...</p>
+                                            <p class="text-xs text-slate-500 mt-1">Describes one particular cat (Descriptive Text).</p>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid lg:grid-cols-2 gap-8">
+                        <div class="bg-surface rounded-3xl shadow-xl card-accent-navy border border-slate-100 p-8 flex flex-col h-full relative overflow-hidden">
+                            <i class="fas fa-layer-group absolute -bottom-5 -right-5 text-[8rem] text-slate-50 opacity-50 pointer-events-none z-0"></i>
+                            <h2 class="text-2xl font-bold text-navy-900 mb-6 font-sans flex items-center gap-3 relative z-10">
+                                <span class="bg-navy-100 text-navy-800 w-10 h-10 flex items-center justify-center rounded-lg text-lg">B</span>
+                                Generic Structure
+                            </h2>
+                            <div class="space-y-6 flex-grow relative z-10">
+                                <div class="relative pl-8 before:content-[''] before:absolute before:left-[11px] before:top-8 before:bottom-0 before:w-0.5 before:bg-slate-200">
+                                    <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-primary-500 text-white flex items-center justify-center text-xs font-bold z-10 ring-4 ring-white">1</div>
+                                    <h3 class="font-bold text-slate-800 mb-2">Identification</h3>
+                                    <p class="text-sm text-slate-600 mb-3">Introduces the particular subject. (Who/what is being described?)</p>
+                                    <div class="bg-slate-50 p-4 rounded-xl text-sm italic text-slate-700 border border-slate-100">
+                                        "My mother is the most important person in my life. She is a teacher..."
+                                    </div>
+                                </div>
+                                <div class="relative pl-8">
+                                    <div class="absolute left-0 top-1 w-6 h-6 rounded-full bg-accent-500 text-white flex items-center justify-center text-xs font-bold z-10 ring-4 ring-white">2</div>
+                                    <h3 class="font-bold text-slate-800 mb-2">Description</h3>
+                                    <p class="text-sm text-slate-600 mb-3">Gives detailed info (appearance, personality, habits, parts, etc.)</p>
+                                    <div class="bg-slate-50 p-4 rounded-xl text-sm italic text-slate-700 border border-slate-100">
+                                        "She has long black hair and a warm smile. She is kind, patient..."
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="bg-surface rounded-3xl shadow-xl card-accent-navy border border-slate-100 p-8 flex flex-col h-full relative overflow-hidden">
+                            <i class="fas fa-language absolute -bottom-5 -right-5 text-[8rem] text-slate-50 opacity-50 pointer-events-none z-0"></i>
+                            <h2 class="text-2xl font-bold text-navy-900 mb-6 font-sans flex items-center gap-3 relative z-10">
+                                <span class="bg-navy-100 text-navy-800 w-10 h-10 flex items-center justify-center rounded-lg text-lg">C</span>
+                                Language Features
+                            </h2>
+                            
+                            <div class="space-y-6 relative z-10">
+                                <div>
+                                    <h3 class="font-bold text-slate-800 flex items-center mb-3">
+                                        <div class="w-8 h-8 rounded-lg bg-blue-50 text-blue-500 flex items-center justify-center mr-3"><i class="fas fa-clock"></i></div>
+                                        1. Simple Present Tense
+                                    </h3>
+                                    <div class="grid grid-cols-2 gap-3 mb-2">
+                                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                            <div class="text-xs font-bold text-slate-400 uppercase mb-1">With 'to be'</div>
+                                            <p class="text-sm text-slate-700">She <span class="font-bold text-blue-600">is</span> beautiful.</p>
+                                        </div>
+                                        <div class="bg-slate-50 p-3 rounded-xl border border-slate-100">
+                                            <div class="text-xs font-bold text-slate-400 uppercase mb-1">With Verbs</div>
+                                            <p class="text-sm text-slate-700">He <span class="font-bold text-blue-600">works</span> hard.</p>
+                                        </div>
+                                    </div>
+                                    <p class="text-xs text-slate-500 italic">*Remember -s/-es for he/she/it verbs.</p>
+                                </div>
+
+                                <div class="grid grid-cols-2 gap-4">
+                                    <div>
+                                        <h3 class="font-bold text-slate-800 flex items-center mb-2 text-sm">
+                                            <i class="fas fa-paint-brush text-accent-500 mr-2"></i> 2. Adjectives
+                                        </h3>
+                                        <div class="flex flex-wrap gap-1.5">
+                                            <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-[10px] font-medium uppercase tracking-wider">Beautiful</span>
+                                            <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-[10px] font-medium uppercase tracking-wider">Playful</span>
+                                            <span class="px-2 py-1 bg-slate-100 text-slate-600 rounded-md text-[10px] font-medium uppercase tracking-wider">Clean</span>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <h3 class="font-bold text-slate-800 flex items-center mb-2 text-sm">
+                                            <i class="fas fa-layer-group text-emerald-500 mr-2"></i> 3. Noun Groups
+                                        </h3>
+                                        <div class="bg-slate-50 p-2 rounded-lg border border-slate-100 text-xs">
+                                            <span class="text-slate-400">a</span> <span class="text-emerald-600 font-medium">beautiful</span> <strong>dress</strong><br>
+                                            <span class="text-slate-400">a</span> <span class="text-emerald-600 font-medium">small black</span> <strong>cat</strong>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-examples" class="tab-content hidden">
+                <div class="bg-surface rounded-3xl shadow-xl card-accent-navy border border-slate-100 p-4 sm:p-8 mb-6 relative overflow-hidden">
+                    <i class="fas fa-images absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20rem] text-slate-50 opacity-30 pointer-events-none z-0"></i>
+                    
+                    <div class="flex flex-wrap justify-center gap-3 sm:gap-6 mb-10 bg-slate-100/80 backdrop-blur-sm p-4 rounded-3xl border border-slate-200 max-w-4xl mx-auto relative z-10">
+                        <button onclick="switchExample('ex-person', this)" class="example-btn active flex-1 py-4 px-6 rounded-2xl text-base sm:text-lg font-semibold transition-all duration-300 text-slate-500 hover:text-navy-700 data-[active=true]:bg-white data-[active=true]:text-navy-800 data-[active=true]:shadow-md hover:-translate-y-1" data-active="true">
+                            <i class="fas fa-user mr-2 text-xl"></i>Person
+                        </button>
+                        <button onclick="switchExample('ex-animal', this)" class="example-btn flex-1 py-4 px-6 rounded-2xl text-base sm:text-lg font-semibold transition-all duration-300 text-slate-500 hover:text-navy-700 data-[active=false]:bg-transparent data-[active=true]:bg-white data-[active=true]:text-navy-800 data-[active=true]:shadow-md hover:-translate-y-1" data-active="false">
+                            <i class="fas fa-paw mr-2 text-xl"></i>Animal
+                        </button>
+                        <button onclick="switchExample('ex-place', this)" class="example-btn flex-1 py-4 px-6 rounded-2xl text-base sm:text-lg font-semibold transition-all duration-300 text-slate-500 hover:text-navy-700 data-[active=false]:bg-transparent data-[active=true]:bg-white data-[active=true]:text-navy-800 data-[active=true]:shadow-md hover:-translate-y-1" data-active="false">
+                            <i class="fas fa-map-marker-alt mr-2 text-xl"></i>Place
+                        </button>
+                        <button onclick="switchExample('ex-thing', this)" class="example-btn flex-1 py-4 px-6 rounded-2xl text-base sm:text-lg font-semibold transition-all duration-300 text-slate-500 hover:text-navy-700 data-[active=false]:bg-transparent data-[active=true]:bg-white data-[active=true]:text-navy-800 data-[active=true]:shadow-md hover:-translate-y-1" data-active="false">
+                            <i class="fas fa-box mr-2 text-xl"></i>Thing
+                        </button>
+                    </div>
+
+                    <div class="relative z-10" id="examples-container">
+                        <!-- Content inserted via JS below -->
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-tags" class="tab-content hidden">
+                <div class="bg-surface rounded-3xl shadow-xl card-accent-navy border border-slate-100 p-6 md:p-10 relative overflow-hidden">
+                    <i class="fas fa-question-circle absolute -top-10 -left-10 text-[15rem] text-slate-50 opacity-50 pointer-events-none z-0"></i>
+                    
+                    <div class="text-center mb-8 relative z-10">
+                        <h2 class="text-3xl font-bold text-navy-900 mb-3 font-sans uppercase">QUESTION TAGS</h2>
+                        <h3 class="text-xl font-bold text-navy-700 mb-4 font-sans">Asking for Confirmation</h3>
+                    </div>
+
+                    <div class="flex flex-wrap gap-2 mb-8 bg-slate-100/80 backdrop-blur-sm p-2 rounded-2xl max-w-3xl mx-auto relative z-10">
+                        <button onclick="switchTagSub('tag-basics', this)" class="tag-sub-btn subtab-btn active flex-1 py-3 px-4 rounded-xl text-sm sm:text-base font-semibold text-slate-500 data-[active=true]:bg-white data-[active=true]:text-navy-900 data-[active=true]:shadow-sm" data-active="true">
+                            <i class="fas fa-book-open mr-2"></i>Rules & Basics
+                        </button>
+                        <button onclick="switchTagSub('tag-aux', this)" class="tag-sub-btn subtab-btn flex-1 py-3 px-4 rounded-xl text-sm sm:text-base font-semibold text-slate-500 data-[active=true]:bg-white data-[active=true]:text-navy-900 data-[active=true]:shadow-sm" data-active="false">
+                            <i class="fas fa-exchange-alt mr-2"></i>Auxiliary Verbs
+                        </button>
+                        <button onclick="switchTagSub('tag-conv', this)" class="tag-sub-btn subtab-btn flex-1 py-3 px-4 rounded-xl text-sm sm:text-base font-semibold text-slate-500 data-[active=true]:bg-white data-[active=true]:text-navy-900 data-[active=true]:shadow-sm" data-active="false">
+                            <i class="fas fa-comments mr-2"></i>Conversations
+                        </button>
+                    </div>
+
+                    <div class="relative z-10 max-w-5xl mx-auto">
+                        <!-- Sub-content: Rules & Basics -->
+                        <div id="tag-basics" class="tag-content block fade-in space-y-8">
+                            <div class="bg-white rounded-2xl p-6 md:p-8 border border-slate-100 shadow-sm">
+                                <h3 class="text-2xl font-bold text-navy-900 mb-4">What Is a Question Tag?</h3>
+                                <p class="text-slate-700 text-lg mb-6">A question tag is a short question added to the end of a statement.</p>
+                                
+                                <h4 class="font-bold text-slate-800 mb-3 text-lg">We use question tags to:</h4>
+                                <ul class="list-disc ml-6 space-y-2 text-slate-700 mb-8 text-lg">
+                                    <li>ask for confirmation;</li>
+                                    <li>check whether information is correct; or</li>
+                                    <li>invite someone to agree with a statement.</li>
+                                </ul>
+                                
+                                <h4 class="font-bold text-slate-800 mb-4 text-xl border-b border-slate-100 pb-2">Examples</h4>
+                                <ul class="space-y-3 text-slate-700 mb-6 text-lg">
+                                    <li class="flex items-center gap-3"><i class="fas fa-check-circle text-emerald-500"></i> <span>Your school is beautiful, <span class="font-bold text-navy-600">isn't it?</span></span></li>
+                                    <li class="flex items-center gap-3"><i class="fas fa-check-circle text-emerald-500"></i> <span>She likes reading, <span class="font-bold text-navy-600">doesn't she?</span></span></li>
+                                    <li class="flex items-center gap-3"><i class="fas fa-check-circle text-emerald-500"></i> <span>They are in the library, <span class="font-bold text-navy-600">aren't they?</span></span></li>
+                                    <li class="flex items-center gap-3"><i class="fas fa-check-circle text-emerald-500"></i> <span>He can swim, <span class="font-bold text-navy-600">can't he?</span></span></li>
+                                    <li class="flex items-center gap-3"><i class="fas fa-check-circle text-emerald-500"></i> <span>You don't like coffee, <span class="font-bold text-navy-600">do you?</span></span></li>
+                                </ul>
+
+                                <div class="bg-blue-50 border-l-4 border-blue-500 p-5 rounded-r-xl">
+                                    <p class="text-blue-900 font-medium mb-3">Notice that each sentence consists of a statement followed by a short question.</p>
+                                    <div class="inline-block bg-white px-4 py-2 rounded-lg font-bold text-blue-700 shadow-sm border border-blue-100">
+                                        Statement + Question Tag
+                                    </div>
+                                </div>
+                            </div>
+
+                            <h3 class="text-3xl font-bold text-navy-900 text-center mt-10 mb-8">The Basic Rules of Question Tags</h3>
+
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm relative overflow-hidden">
+                                    <div class="absolute top-0 left-0 w-1 h-full bg-emerald-400"></div>
+                                    <h4 class="font-bold text-xl text-slate-800 mb-2">Rule 1: Positive Statement + Negative Tag</h4>
+                                    <p class="text-slate-600 mb-4 text-sm">When the statement is positive, the question tag is generally negative.</p>
+                                    
+                                    <div class="overflow-x-auto rounded-xl border border-slate-200 mb-6">
+                                        <table class="w-full text-sm text-left text-slate-700">
+                                            <thead class="bg-slate-50 text-slate-800 font-bold border-b border-slate-200">
+                                                <tr><th class="px-4 py-3">Statement</th><th class="px-4 py-3 border-l border-slate-200">Question Tag</th></tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100">
+                                                <tr><td class="px-4 py-3">She is kind,</td><td class="px-4 py-3 border-l border-slate-200 font-bold text-rose-500">isn't she?</td></tr>
+                                                <tr><td class="px-4 py-3">They are students,</td><td class="px-4 py-3 border-l border-slate-200 font-bold text-rose-500">aren't they?</td></tr>
+                                                <tr><td class="px-4 py-3">He can swim,</td><td class="px-4 py-3 border-l border-slate-200 font-bold text-rose-500">can't he?</td></tr>
+                                                <tr><td class="px-4 py-3">You like English,</td><td class="px-4 py-3 border-l border-slate-200 font-bold text-rose-500">don't you?</td></tr>
+                                                <tr><td class="px-4 py-3">She speaks English,</td><td class="px-4 py-3 border-l border-slate-200 font-bold text-rose-500">doesn't she?</td></tr>
+                                                <tr><td class="px-4 py-3">They visited the museum,</td><td class="px-4 py-3 border-l border-slate-200 font-bold text-rose-500">didn't they?</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <h5 class="font-bold text-slate-800 text-sm mb-3 uppercase tracking-wide">Examples in context:</h5>
+                                    <ul class="list-disc ml-5 space-y-2 text-sm text-slate-700">
+                                        <li>Your classroom is clean, isn't it?</li>
+                                        <li>The students are friendly, aren't they?</li>
+                                        <li>Your brother likes reading, doesn't he?</li>
+                                        <li>They visited the library yesterday, didn't they?</li>
+                                    </ul>
+                                </div>
+
+                                <div class="bg-white rounded-2xl p-6 border border-slate-100 shadow-sm relative overflow-hidden">
+                                    <div class="absolute top-0 left-0 w-1 h-full bg-rose-400"></div>
+                                    <h4 class="font-bold text-xl text-slate-800 mb-2">Rule 2: Negative Statement + Positive Tag</h4>
+                                    <p class="text-slate-600 mb-4 text-sm">When the statement is negative, the question tag is generally positive.</p>
+                                    
+                                    <div class="overflow-x-auto rounded-xl border border-slate-200 mb-6">
+                                        <table class="w-full text-sm text-left text-slate-700">
+                                            <thead class="bg-slate-50 text-slate-800 font-bold border-b border-slate-200">
+                                                <tr><th class="px-4 py-3">Statement</th><th class="px-4 py-3 border-l border-slate-200">Question Tag</th></tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100">
+                                                <tr><td class="px-4 py-3">She isn't tired,</td><td class="px-4 py-3 border-l border-slate-200 font-bold text-emerald-600">is she?</td></tr>
+                                                <tr><td class="px-4 py-3">They aren't busy,</td><td class="px-4 py-3 border-l border-slate-200 font-bold text-emerald-600">are they?</td></tr>
+                                                <tr><td class="px-4 py-3">He can't swim,</td><td class="px-4 py-3 border-l border-slate-200 font-bold text-emerald-600">can he?</td></tr>
+                                                <tr><td class="px-4 py-3">You don't like tea,</td><td class="px-4 py-3 border-l border-slate-200 font-bold text-emerald-600">do you?</td></tr>
+                                                <tr><td class="px-4 py-3">She doesn't play tennis,</td><td class="px-4 py-3 border-l border-slate-200 font-bold text-emerald-600">does she?</td></tr>
+                                                <tr><td class="px-4 py-3">They didn't come yesterday,</td><td class="px-4 py-3 border-l border-slate-200 font-bold text-emerald-600">did they?</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <h5 class="font-bold text-slate-800 text-sm mb-3 uppercase tracking-wide">Examples in context:</h5>
+                                    <ul class="list-disc ml-5 space-y-2 text-sm text-slate-700">
+                                        <li>The library isn't crowded, is it?</li>
+                                        <li>They aren't at school, are they?</li>
+                                        <li>He doesn't like reading, does he?</li>
+                                        <li>You didn't visit the park, did you?</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="bg-amber-50 rounded-2xl p-6 border border-amber-200 max-w-2xl mx-auto shadow-sm text-center mt-6">
+                                <h4 class="font-bold text-amber-900 text-xl mb-4 flex justify-center items-center gap-2"><i class="fas fa-lightbulb text-amber-500"></i> Remember!</h4>
+                                <div class="inline-block bg-white rounded-xl border border-amber-200 overflow-hidden shadow-sm">
+                                    <table class="text-left text-slate-800">
+                                        <thead class="bg-amber-100 text-amber-900 font-bold border-b border-amber-200">
+                                            <tr><th class="px-8 py-3">Statement</th><th class="px-8 py-3 border-l border-amber-200">Tag</th></tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-amber-100 font-medium">
+                                            <tr><td class="px-8 py-3 text-emerald-700">Positive</td><td class="px-8 py-3 border-l border-amber-200 text-rose-600">Negative</td></tr>
+                                            <tr><td class="px-8 py-3 text-rose-600">Negative</td><td class="px-8 py-3 border-l border-amber-200 text-emerald-700">Positive</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sub-content: Auxiliary Verbs -->
+                        <div id="tag-aux" class="tag-content hidden space-y-8">
+                            <div class="text-center">
+                                <h3 class="text-2xl font-bold text-navy-900 mb-3">Choosing the Correct Auxiliary Verb</h3>
+                                <p class="text-slate-600 text-lg">The auxiliary verb in the question tag must match the verb pattern in the statement.</p>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                                    <div class="bg-slate-50 font-bold text-navy-800 py-4 px-6 border-b border-slate-200 text-lg">1. Sentences with Be</div>
+                                    <div class="p-6">
+                                        <p class="text-slate-600 mb-4">Use am, is, are, was, or were as appropriate.</p>
+                                        <table class="w-full text-sm text-left text-slate-700 border border-slate-200 rounded-lg overflow-hidden">
+                                            <thead class="bg-slate-100 font-bold"><tr><th class="px-4 py-2">Statement</th><th class="px-4 py-2 border-l border-slate-200">Question Tag</th></tr></thead>
+                                            <tbody class="divide-y divide-slate-100 bg-white">
+                                                <tr><td class="px-4 py-2">She is beautiful,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">isn't she?</td></tr>
+                                                <tr><td class="px-4 py-2">They are happy,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">aren't they?</td></tr>
+                                                <tr><td class="px-4 py-2">He was late,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">wasn't he?</td></tr>
+                                                <tr><td class="px-4 py-2">You were tired,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">weren't you?</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                                    <div class="bg-slate-50 font-bold text-navy-800 py-4 px-6 border-b border-slate-200 text-lg">2. Simple Present Tense</div>
+                                    <div class="p-6">
+                                        <p class="text-slate-600 mb-4">When a sentence uses an ordinary verb in the Simple Present Tense, use do or does.</p>
+                                        <table class="w-full text-sm text-left text-slate-700 border border-slate-200 rounded-lg overflow-hidden mb-4">
+                                            <thead class="bg-slate-100 font-bold"><tr><th class="px-4 py-2">Statement</th><th class="px-4 py-2 border-l border-slate-200">Question Tag</th></tr></thead>
+                                            <tbody class="divide-y divide-slate-100 bg-white">
+                                                <tr><td class="px-4 py-2">You like English,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">don't you?</td></tr>
+                                                <tr><td class="px-4 py-2">She likes English,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">doesn't she?</td></tr>
+                                                <tr><td class="px-4 py-2">They play football,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">don't they?</td></tr>
+                                                <tr><td class="px-4 py-2">He plays football,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">doesn't he?</td></tr>
+                                            </tbody>
+                                        </table>
+                                        <div class="bg-amber-50 p-3 rounded-lg border border-amber-100 text-sm">
+                                            <div class="font-bold text-amber-900 mb-1">Remember:</div>
+                                            <div class="text-amber-800">I, you, we, they → do/don't</div>
+                                            <div class="text-amber-800">He, she, it → does/doesn't</div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                                    <div class="bg-slate-50 font-bold text-navy-800 py-4 px-6 border-b border-slate-200 text-lg">3. Simple Past Tense</div>
+                                    <div class="p-6">
+                                        <p class="text-slate-600 mb-4">Use did or didn't when the statement uses an ordinary verb in the Simple Past Tense.</p>
+                                        <table class="w-full text-sm text-left text-slate-700 border border-slate-200 rounded-lg overflow-hidden">
+                                            <thead class="bg-slate-100 font-bold"><tr><th class="px-4 py-2">Statement</th><th class="px-4 py-2 border-l border-slate-200">Question Tag</th></tr></thead>
+                                            <tbody class="divide-y divide-slate-100 bg-white">
+                                                <tr><td class="px-4 py-2">She visited the museum,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">didn't she?</td></tr>
+                                                <tr><td class="px-4 py-2">They played football,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">didn't they?</td></tr>
+                                                <tr><td class="px-4 py-2">He didn't attend the meeting,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">did he?</td></tr>
+                                                <tr><td class="px-4 py-2">You watched the movie,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">didn't you?</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                                    <div class="bg-slate-50 font-bold text-navy-800 py-4 px-6 border-b border-slate-200 text-lg">4. Modal Verbs</div>
+                                    <div class="p-6">
+                                        <p class="text-slate-600 mb-4">Use the same modal verb in the question tag.</p>
+                                        <table class="w-full text-sm text-left text-slate-700 border border-slate-200 rounded-lg overflow-hidden">
+                                            <thead class="bg-slate-100 font-bold"><tr><th class="px-4 py-2">Statement</th><th class="px-4 py-2 border-l border-slate-200">Question Tag</th></tr></thead>
+                                            <tbody class="divide-y divide-slate-100 bg-white">
+                                                <tr><td class="px-4 py-2">She can swim,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">can't she?</td></tr>
+                                                <tr><td class="px-4 py-2">He will come,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">won't he?</td></tr>
+                                                <tr><td class="px-4 py-2">They should study,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">shouldn't they?</td></tr>
+                                                <tr><td class="px-4 py-2">You must finish this task,</td><td class="px-4 py-2 border-l border-slate-200 font-bold text-primary-600">mustn't you?</td></tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+
+                                <div class="bg-amber-50 border border-amber-200 rounded-2xl overflow-hidden shadow-sm relative md:col-span-2 flex flex-col md:flex-row">
+                                    <div class="absolute right-0 top-0 text-amber-500/10 text-8xl -mt-4 mr-2 pointer-events-none"><i class="fas fa-star"></i></div>
+                                    <div class="bg-amber-100/80 font-bold text-amber-900 py-6 px-6 border-b md:border-b-0 md:border-r border-amber-200 relative z-10 md:w-1/3 flex flex-col justify-center items-center text-center">
+                                        <i class="fas fa-exclamation-triangle text-3xl text-amber-500 mb-3"></i>
+                                        <span class="text-xl mb-1">5. Special Case: I am</span>
+                                    </div>
+                                    <div class="p-6 md:p-8 space-y-4 text-base relative z-10 md:w-2/3 bg-white/50">
+                                        <p class="text-slate-800">The usual question tag for a positive statement beginning with <strong class="text-amber-900 bg-amber-100 px-1 rounded">I am</strong> is <strong class="text-amber-900 bg-amber-100 px-1 rounded">aren't I?</strong></p>
+                                        <div class="bg-white p-4 rounded-xl border border-amber-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                            <span class="text-slate-500 font-bold text-sm uppercase">Example:</span>
+                                            <span class="text-lg">I am late, <span class="font-bold text-rose-500">aren't I?</span></span>
+                                        </div>
+                                        
+                                        <div class="mt-4 pt-4 border-t border-amber-200/50">
+                                            <p class="text-slate-800 mb-3">For a negative statement:</p>
+                                            <div class="bg-white p-4 rounded-xl border border-amber-100 shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                                                <span class="text-lg">I am not late, <span class="font-bold text-emerald-600">am I?</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Sub-content: Conversations -->
+                        <div id="tag-conv" class="tag-content hidden space-y-8">
+                            <div class="bg-navy-50 rounded-2xl p-8 border border-navy-100 text-center shadow-sm">
+                                <h3 class="text-2xl font-bold text-navy-900 mb-4">Using Question Tags in Conversations</h3>
+                                <p class="text-lg text-navy-800">Question tags are useful when talking about places, people, and everyday experiences.</p>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-6 mt-8">
+                                <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 shadow-sm">
+                                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4 border-b border-slate-200 pb-2">Dialogue 1: School (Places)</h3>
+                                    <div class="space-y-4">
+                                        <div class="flex items-start">
+                                            <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-700 font-bold flex items-center justify-center text-xs mr-3 shrink-0">Alya</div>
+                                            <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm border border-slate-100">
+                                                Our school has a beautiful garden, <span class="font-bold text-blue-600">doesn't it?</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start justify-end">
+                                            <div class="bg-navy-800 p-3 rounded-2xl rounded-tr-none shadow-sm text-white text-sm">
+                                                Yes, it does. The flowers are beautiful, too.
+                                            </div>
+                                            <div class="w-8 h-8 rounded-full bg-accent-100 text-accent-700 font-bold flex items-center justify-center text-xs ml-3 shrink-0">Nadia</div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 shadow-sm">
+                                    <h3 class="text-sm font-bold text-slate-500 uppercase tracking-wider mb-4 border-b border-slate-200 pb-2">Dialogue 2: Friend (People)</h3>
+                                    <div class="space-y-4">
+                                        <div class="flex items-start">
+                                            <div class="w-8 h-8 rounded-full bg-emerald-100 text-emerald-700 font-bold flex items-center justify-center text-xs mr-3 shrink-0">Rina</div>
+                                            <div class="bg-white p-3 rounded-2xl rounded-tl-none shadow-sm text-sm border border-slate-100">
+                                                Your sister likes reading, <span class="font-bold text-emerald-600">doesn't she?</span>
+                                            </div>
+                                        </div>
+                                        <div class="flex items-start justify-end">
+                                            <div class="bg-navy-800 p-3 rounded-2xl rounded-tr-none shadow-sm text-white text-sm">
+                                                Yes, she does. She reads every night.
+                                            </div>
+                                            <div class="w-8 h-8 rounded-full bg-purple-100 text-purple-700 font-bold flex items-center justify-center text-xs ml-3 shrink-0">Dina</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-compliments" class="tab-content hidden">
+                <div class="bg-surface rounded-3xl shadow-xl card-accent-navy border border-slate-100 p-6 md:p-10 relative overflow-hidden">
+                    <i class="fas fa-star absolute -top-10 -right-10 text-[15rem] text-slate-50 opacity-50 pointer-events-none z-0"></i>
+                    
+                    <div class="text-center mb-8 relative z-10">
+                        <h2 class="text-3xl font-bold text-navy-900 mb-3 font-sans">Giving Compliments & Expressions</h2>
+                        <p class="text-slate-500 max-w-xl mx-auto">Learn how to praise others and express strong emotions using exclamatory sentences and interjections.</p>
+                    </div>
+
+                    <div class="flex flex-wrap justify-center gap-2 mb-8 bg-slate-100/80 backdrop-blur-sm p-2 rounded-2xl max-w-4xl mx-auto relative z-10">
+                        <button onclick="switchCompSub('comp-general', this)" class="comp-sub-btn subtab-btn active flex-1 py-3 px-3 sm:px-4 rounded-xl text-sm sm:text-base font-semibold text-slate-500 data-[active=true]:bg-white data-[active=true]:text-navy-900 data-[active=true]:shadow-sm" data-active="true">
+                            <i class="fas fa-comment-dots mr-2"></i>General Compliments
+                        </button>
+                        <button onclick="switchCompSub('comp-exclamatory', this)" class="comp-sub-btn subtab-btn flex-1 py-3 px-3 sm:px-4 rounded-xl text-sm sm:text-base font-semibold text-slate-500 data-[active=true]:bg-white data-[active=true]:text-navy-900 data-[active=true]:shadow-sm" data-active="false">
+                            <i class="fas fa-exclamation mr-2"></i>Exclamatory Sentences
+                        </button>
+                        <button onclick="switchCompSub('comp-interjection', this)" class="comp-sub-btn subtab-btn flex-1 py-3 px-3 sm:px-4 rounded-xl text-sm sm:text-base font-semibold text-slate-500 data-[active=true]:bg-white data-[active=true]:text-navy-900 data-[active=true]:shadow-sm" data-active="false">
+                            <i class="fas fa-bolt mr-2"></i>Interjections
+                        </button>
+                    </div>
+
+                    <div class="relative z-10 max-w-5xl mx-auto">
+                        
+                        <div id="comp-general" class="comp-content block fade-in space-y-8">
+                            <div class="bg-blue-50/50 p-6 md:p-8 rounded-2xl border border-blue-100">
+                                <h3 class="font-bold text-xl text-blue-900 mb-4 flex items-center gap-2"><i class="fas fa-info-circle text-blue-500"></i> What Is a Compliment?</h3>
+                                <p class="text-blue-800 mb-4">A compliment is an expression used to say something positive about someone or something. We give compliments to:</p>
+                                <ul class="grid sm:grid-cols-2 gap-3 text-blue-900 font-medium">
+                                    <li class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs"><i class="fas fa-check"></i></div> show admiration</li>
+                                    <li class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs"><i class="fas fa-check"></i></div> appreciate someone's effort</li>
+                                    <li class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs"><i class="fas fa-check"></i></div> express approval</li>
+                                    <li class="flex items-center gap-2"><div class="w-6 h-6 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs"><i class="fas fa-check"></i></div> make someone feel appreciated</li>
+                                </ul>
+                            </div>
+
+                            <div>
+                                <h3 class="text-2xl font-bold text-navy-900 mb-6 text-center">Categories & Examples</h3>
+                                <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                                    <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover-card">
+                                        <div class="w-12 h-12 rounded-xl bg-primary-50 text-primary-600 flex items-center justify-center mb-4 text-xl">
+                                            <i class="fas fa-user"></i>
+                                        </div>
+                                        <h4 class="font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">Complimenting a Person</h4>
+                                        <ul class="space-y-2 text-sm text-slate-600 list-disc list-inside">
+                                            <li>You look beautiful today!</li>
+                                            <li>You are very kind.</li>
+                                            <li>You are a talented student.</li>
+                                            <li>Your presentation was excellent!</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover-card">
+                                        <div class="w-12 h-12 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center mb-4 text-xl">
+                                            <i class="fas fa-map-marker-alt"></i>
+                                        </div>
+                                        <h4 class="font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">Complimenting a Place</h4>
+                                        <ul class="space-y-2 text-sm text-slate-600 list-disc list-inside">
+                                            <li>Your school is beautiful!</li>
+                                            <li>The garden looks amazing!</li>
+                                            <li>Your classroom is very clean!</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover-card">
+                                        <div class="w-12 h-12 rounded-xl bg-orange-50 text-orange-600 flex items-center justify-center mb-4 text-xl">
+                                            <i class="fas fa-paw"></i>
+                                        </div>
+                                        <h4 class="font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">Complimenting an Animal</h4>
+                                        <ul class="space-y-2 text-sm text-slate-600 list-disc list-inside">
+                                            <li>Your cat is so cute!</li>
+                                            <li>What a beautiful bird!</li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-5 rounded-2xl border border-slate-100 shadow-sm hover-card">
+                                        <div class="w-12 h-12 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center mb-4 text-xl">
+                                            <i class="fas fa-box"></i>
+                                        </div>
+                                        <h4 class="font-bold text-slate-800 mb-3 border-b border-slate-100 pb-2">Complimenting a Thing</h4>
+                                        <ul class="space-y-2 text-sm text-slate-600 list-disc list-inside">
+                                            <li>Your bag looks lovely!</li>
+                                            <li>Your drawing is wonderful!</li>
+                                            <li>What a beautiful painting!</li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-12 pt-8 border-t border-slate-200">
+                                <h3 class="text-2xl font-bold text-navy-900 mb-2">How to Respond to Compliments</h3>
+                                <p class="text-slate-600 mb-8">When someone gives us a compliment, we should respond politely.</p>
+                                
+                                <div class="grid lg:grid-cols-2 gap-8 items-start">
+                                    <div class="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+                                        <table class="w-full text-sm text-left text-slate-700">
+                                            <thead class="bg-slate-50 text-slate-800 font-bold border-b border-slate-200">
+                                                <tr>
+                                                    <th class="px-5 py-4">Expression</th>
+                                                    <th class="px-5 py-4 border-l border-slate-200">Example Response</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100">
+                                                <tr class="hover:bg-slate-50/50">
+                                                    <td class="px-5 py-3 font-medium">Thank you.</td>
+                                                    <td class="px-5 py-3 border-l border-slate-200 text-primary-700">Thank you!</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50">
+                                                    <td class="px-5 py-3 font-medium">Thank you so much.</td>
+                                                    <td class="px-5 py-3 border-l border-slate-200 text-primary-700">Thank you so much!</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50">
+                                                    <td class="px-5 py-3 font-medium">That's very kind of you.</td>
+                                                    <td class="px-5 py-3 border-l border-slate-200 text-primary-700">That's very kind of you.</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50">
+                                                    <td class="px-5 py-3 font-medium">I'm glad you like it.</td>
+                                                    <td class="px-5 py-3 border-l border-slate-200 text-primary-700">I'm glad you like my drawing.</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50">
+                                                    <td class="px-5 py-3 font-medium">I'm happy to hear that.</td>
+                                                    <td class="px-5 py-3 border-l border-slate-200 text-primary-700">I'm happy to hear that.</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    
+                                    <div class="bg-slate-50 p-6 rounded-3xl border border-slate-200 shadow-inner">
+                                        <h4 class="font-bold text-slate-700 mb-6 text-sm uppercase tracking-wider text-center flex items-center justify-center gap-2">
+                                            <i class="fas fa-comments text-accent-500 text-lg"></i> Example Dialogue
+                                        </h4>
+                                        <div class="flex flex-col gap-5">
+                                            <div class="flex items-end gap-3">
+                                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 flex items-center justify-center text-white font-bold shadow-md">A</div>
+                                                <div class="bg-white px-5 py-4 rounded-2xl rounded-bl-none shadow-[0_4px_20px_-5px_rgba(0,0,0,0.1)] border border-slate-100 max-w-[85%] text-[15px] text-slate-700">
+                                                    <span class="font-bold text-blue-600">Your drawing is beautiful!</span>
+                                                </div>
+                                            </div>
+                                            <div class="flex items-end gap-3 self-end flex-row-reverse">
+                                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent-400 to-accent-600 flex-shrink-0 flex items-center justify-center text-white font-bold shadow-md">B</div>
+                                                <div class="bg-navy-800 text-white px-5 py-4 rounded-2xl rounded-br-none shadow-[0_4px_20px_-5px_rgba(0,0,0,0.2)] max-w-[85%] text-[15px]">
+                                                    <span class="font-semibold text-accent-300">Thank you!</span> I'm glad you like it.
+                                                </div>
+                                            </div>
+                                            <div class="flex items-end gap-3">
+                                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-blue-400 to-blue-600 flex-shrink-0 flex items-center justify-center text-white font-bold shadow-md">A</div>
+                                                <div class="bg-white px-5 py-4 rounded-2xl rounded-bl-none shadow-[0_4px_20px_-5px_rgba(0,0,0,0.1)] border border-slate-100 max-w-[85%] text-[15px] text-slate-700">
+                                                    You are very good at drawing.
+                                                </div>
+                                            </div>
+                                            <div class="flex items-end gap-3 self-end flex-row-reverse">
+                                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-accent-400 to-accent-600 flex-shrink-0 flex items-center justify-center text-white font-bold shadow-md">B</div>
+                                                <div class="bg-navy-800 text-white px-5 py-4 rounded-2xl rounded-br-none shadow-[0_4px_20px_-5px_rgba(0,0,0,0.2)] max-w-[85%] text-[15px]">
+                                                    <span class="font-semibold text-accent-300">That's very kind of you.</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="comp-exclamatory" class="comp-content hidden space-y-8">
+                            <div class="bg-accent-50/50 p-6 rounded-2xl border border-accent-100 mb-6">
+                                <h3 class="font-bold text-lg text-accent-900 mb-2">What Is an Exclamatory Sentence?</h3>
+                                <p class="text-accent-800 text-sm">An exclamatory sentence expresses a strong emotion, such as deep admiration, surprise, or excitement. It always ends with an exclamation mark (!).</p>
+                            </div>
+
+                            <div class="grid md:grid-cols-2 gap-8">
+                                <div>
+                                    <h3 class="font-bold text-xl text-slate-800 mb-4 flex items-center border-b border-slate-200 pb-2">
+                                        <span class="bg-primary-100 text-primary-700 px-3 py-1 rounded-lg text-sm mr-3 font-mono">Structure</span> Using WHAT
+                                    </h3>
+                                    <p class="text-sm text-slate-500 mb-4">We use "What" to emphasize a noun or a noun phrase.</p>
+                                    
+                                    <div class="space-y-4">
+                                        <div class="bg-white p-5 rounded-2xl border-l-4 border-l-blue-500 shadow-sm border border-slate-100 hover-card">
+                                            <div class="text-[11px] font-bold text-slate-400 uppercase mb-2 tracking-wider">Pattern 1: Singular Noun</div>
+                                            <div class="font-mono text-sm text-blue-600 font-bold mb-3 bg-blue-50 py-1.5 px-3 rounded-md inline-block">What + a/an + adj + singular noun!</div>
+                                            <ul class="list-disc ml-5 text-sm text-slate-700 space-y-1">
+                                                <li><span class="font-semibold">What a beautiful dress</span> she is wearing!</li>
+                                                <li><span class="font-semibold">What an interesting book</span> this is!</li>
+                                            </ul>
+                                        </div>
+                                        <div class="bg-white p-5 rounded-2xl border-l-4 border-l-emerald-500 shadow-sm border border-slate-100 hover-card">
+                                            <div class="text-[11px] font-bold text-slate-400 uppercase mb-2 tracking-wider">Pattern 2: Plural Noun</div>
+                                            <div class="font-mono text-sm text-emerald-600 font-bold mb-3 bg-emerald-50 py-1.5 px-3 rounded-md inline-block">What + adj + plural noun!</div>
+                                            <ul class="list-disc ml-5 text-sm text-slate-700 space-y-1">
+                                                <li><span class="font-semibold">What beautiful flowers</span> they bought!</li>
+                                                <li><span class="font-semibold">What smart students</span> they are!</li>
+                                            </ul>
+                                        </div>
+                                        <div class="bg-white p-5 rounded-2xl border-l-4 border-l-purple-500 shadow-sm border border-slate-100 hover-card">
+                                            <div class="text-[11px] font-bold text-slate-400 uppercase mb-2 tracking-wider">Pattern 3: Uncountable Noun</div>
+                                            <div class="font-mono text-sm text-purple-600 font-bold mb-3 bg-purple-50 py-1.5 px-3 rounded-md inline-block">What + adj + uncountable noun!</div>
+                                            <ul class="list-disc ml-5 text-sm text-slate-700 space-y-1">
+                                                <li><span class="font-semibold">What delicious food</span> you cooked!</li>
+                                                <li><span class="font-semibold">What lovely weather</span> we have today!</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div>
+                                    <h3 class="font-bold text-xl text-slate-800 mb-4 flex items-center border-b border-slate-200 pb-2">
+                                        <span class="bg-accent-100 text-accent-700 px-3 py-1 rounded-lg text-sm mr-3 font-mono">Structure</span> Using HOW
+                                    </h3>
+                                    <p class="text-sm text-slate-500 mb-4">We use "How" to emphasize an adjective or an adverb directly.</p>
+                                    
+                                    <div class="bg-white p-5 rounded-2xl border-l-4 border-l-accent-500 shadow-sm border border-slate-100 hover-card mb-6">
+                                        <div class="font-mono text-sm text-accent-600 font-bold mb-4 bg-accent-50 py-2 px-3 rounded-md text-center block">How + adjective/adverb + Subject + Verb!</div>
+                                        
+                                        <ul class="space-y-4 text-slate-700 text-sm">
+                                            <li class="flex items-start">
+                                                <i class="fas fa-check-circle text-accent-400 mt-1 mr-3 text-lg"></i>
+                                                <div>
+                                                    <span class="font-bold">How beautiful</span> the garden is!
+                                                    <div class="text-xs text-slate-400 mt-0.5">Emphasizes the adjective "beautiful".</div>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="fas fa-check-circle text-accent-400 mt-1 mr-3 text-lg"></i>
+                                                <div>
+                                                    <span class="font-bold">How quickly</span> he runs!
+                                                    <div class="text-xs text-slate-400 mt-0.5">Emphasizes the adverb "quickly".</div>
+                                                </div>
+                                            </li>
+                                            <li class="flex items-start">
+                                                <i class="fas fa-check-circle text-accent-400 mt-1 mr-3 text-lg"></i>
+                                                <div>
+                                                    <span class="font-bold">How smart</span> they are!
+                                                    <div class="text-xs text-slate-400 mt-0.5">Emphasizes the adjective "smart".</div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+
+                                    <div class="bg-amber-50 p-5 rounded-xl border border-amber-200 text-sm text-amber-900 shadow-sm">
+                                        <h4 class="font-bold flex items-center gap-2 mb-2"><i class="fas fa-lightbulb text-amber-500"></i> Pro Tip</h4>
+                                        Exclamatory sentences are often used together with regular compliments to show deeper sincerity and stronger emotion.
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 bg-slate-50 p-6 rounded-2xl border border-slate-200 shadow-sm">
+                                <h3 class="text-xl font-bold text-navy-900 mb-6 text-center border-b border-slate-200 pb-3">Comparing WHAT and HOW</h3>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    <div class="bg-white p-5 rounded-xl border border-blue-100 shadow-sm">
+                                        <h4 class="font-bold text-blue-800 mb-3 text-center bg-blue-50 py-2 rounded-lg">WHAT (Focus on Noun)</h4>
+                                        <ul class="space-y-4 text-sm text-slate-700">
+                                            <li class="flex flex-col border-b border-slate-100 pb-2">
+                                                <span class="text-blue-600 font-bold mb-1">What a fast car!</span>
+                                                <span class="text-slate-500 italic">(Emphasizes the noun "car")</span>
+                                            </li>
+                                            <li class="flex flex-col border-b border-slate-100 pb-2">
+                                                <span class="text-blue-600 font-bold mb-1">What a tall building!</span>
+                                                <span class="text-slate-500 italic">(Emphasizes the noun "building")</span>
+                                            </li>
+                                            <li class="flex flex-col">
+                                                <span class="text-blue-600 font-bold mb-1">What cute puppies!</span>
+                                                <span class="text-slate-500 italic">(Emphasizes the noun "puppies")</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="bg-white p-5 rounded-xl border border-accent-100 shadow-sm">
+                                        <h4 class="font-bold text-accent-800 mb-3 text-center bg-accent-50 py-2 rounded-lg">HOW (Focus on Adjective)</h4>
+                                        <ul class="space-y-4 text-sm text-slate-700">
+                                            <li class="flex flex-col border-b border-slate-100 pb-2">
+                                                <span class="text-accent-600 font-bold mb-1">How fast the car is!</span>
+                                                <span class="text-slate-500 italic">(Emphasizes the adjective "fast")</span>
+                                            </li>
+                                            <li class="flex flex-col border-b border-slate-100 pb-2">
+                                                <span class="text-accent-600 font-bold mb-1">How tall the building is!</span>
+                                                <span class="text-slate-500 italic">(Emphasizes the adjective "tall")</span>
+                                            </li>
+                                            <li class="flex flex-col">
+                                                <span class="text-accent-600 font-bold mb-1">How cute the puppies are!</span>
+                                                <span class="text-slate-500 italic">(Emphasizes the adjective "cute")</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="mt-8 bg-white p-6 md:p-8 rounded-2xl border border-slate-200 shadow-sm">
+                                <h3 class="text-xl font-bold text-navy-900 mb-4">Turning Compliments into Exclamatory Sentences</h3>
+                                <p class="text-slate-600 mb-6 text-sm">To make your compliments sound stronger and more enthusiastic, you can change a normal statement into an exclamatory sentence.</p>
+                                
+                                <div class="overflow-x-auto">
+                                    <table class="w-full text-sm text-left text-slate-700 border border-slate-200 rounded-lg overflow-hidden">
+                                        <thead class="bg-slate-100 font-bold text-slate-800">
+                                            <tr>
+                                                <th class="px-5 py-4">Normal Statement</th>
+                                                <th class="px-5 py-4 border-l border-slate-200 bg-blue-50/50 text-blue-800">Using WHAT</th>
+                                                <th class="px-5 py-4 border-l border-slate-200 bg-accent-50/50 text-accent-800">Using HOW</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody class="divide-y divide-slate-100">
+                                            <tr class="hover:bg-slate-50 transition-colors">
+                                                <td class="px-5 py-4 font-medium">He is a smart boy.</td>
+                                                <td class="px-5 py-4 border-l border-slate-200 text-blue-700 font-semibold">What a smart boy he is!</td>
+                                                <td class="px-5 py-4 border-l border-slate-200 text-accent-700 font-semibold">How smart the boy is!</td>
+                                            </tr>
+                                            <tr class="hover:bg-slate-50 transition-colors">
+                                                <td class="px-5 py-4 font-medium">It is a beautiful painting.</td>
+                                                <td class="px-5 py-4 border-l border-slate-200 text-blue-700 font-semibold">What a beautiful painting!</td>
+                                                <td class="px-5 py-4 border-l border-slate-200 text-accent-700 font-semibold">How beautiful the painting is!</td>
+                                            </tr>
+                                            <tr class="hover:bg-slate-50 transition-colors">
+                                                <td class="px-5 py-4 font-medium">They are friendly students.</td>
+                                                <td class="px-5 py-4 border-l border-slate-200 text-blue-700 font-semibold">What friendly students they are!</td>
+                                                <td class="px-5 py-4 border-l border-slate-200 text-accent-700 font-semibold">How friendly the students are!</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="comp-interjection" class="comp-content hidden space-y-8">
+                            <div class="bg-emerald-50/50 p-6 rounded-2xl border border-emerald-100 mb-6">
+                                <h3 class="font-bold text-xl text-emerald-900 mb-3">What Is an Interjection?</h3>
+                                <p class="text-emerald-800 text-base mb-4">An interjection is a word or short expression used to communicate a spontaneous feeling or reaction.</p>
+                                <p class="text-emerald-800 font-medium mb-2">Interjections can express:</p>
+                                <ul class="grid grid-cols-2 md:grid-cols-3 gap-2 text-emerald-900">
+                                    <li class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-emerald-500"></div> admiration;</li>
+                                    <li class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-emerald-500"></div> surprise;</li>
+                                    <li class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-emerald-500"></div> happiness;</li>
+                                    <li class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-emerald-500"></div> disappointment;</li>
+                                    <li class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-emerald-500"></div> pain; or</li>
+                                    <li class="flex items-center gap-2"><div class="w-2 h-2 rounded-full bg-emerald-500"></div> realization.</li>
+                                </ul>
+                                <div class="mt-4 pt-4 border-t border-emerald-200/50">
+                                    <p class="text-emerald-900 font-bold mb-2">Examples:</p>
+                                    <div class="flex flex-wrap gap-2">
+                                        <span class="px-3 py-1 bg-white rounded-lg border border-emerald-200 text-emerald-700 font-semibold shadow-sm">Wow!</span>
+                                        <span class="px-3 py-1 bg-white rounded-lg border border-emerald-200 text-emerald-700 font-semibold shadow-sm">Oh!</span>
+                                        <span class="px-3 py-1 bg-white rounded-lg border border-emerald-200 text-emerald-700 font-semibold shadow-sm">Oops!</span>
+                                        <span class="px-3 py-1 bg-white rounded-lg border border-emerald-200 text-emerald-700 font-semibold shadow-sm">Ouch!</span>
+                                        <span class="px-3 py-1 bg-white rounded-lg border border-emerald-200 text-emerald-700 font-semibold shadow-sm">Hurray!</span>
+                                        <span class="px-3 py-1 bg-white rounded-lg border border-emerald-200 text-emerald-700 font-semibold shadow-sm">Aha!</span>
+                                    </div>
+                                </div>
+                                <p class="mt-4 text-emerald-800 text-sm">In this lesson, we focus on interjections used to express admiration, delight, and positive surprise.</p>
+                            </div>
+
+                            <div class="mb-8">
+                                <h3 class="text-2xl font-bold text-navy-900 mb-6">Common Interjections</h3>
+                                <div class="grid md:grid-cols-2 gap-4">
+                                    
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover-card">
+                                        <div class="bg-blue-100 text-blue-700 font-bold text-lg w-[80px] h-12 flex items-center justify-center rounded-lg shrink-0">Wow!</div>
+                                        <div class="flex flex-col justify-center">
+                                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Admiration or surprise</div>
+                                            <div class="text-sm text-slate-700 mt-0.5">"Wow! Your school is beautiful!"</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover-card">
+                                        <div class="bg-teal-100 text-teal-700 font-bold text-lg w-[80px] h-12 flex items-center justify-center rounded-lg shrink-0">Ooh!</div>
+                                        <div class="flex flex-col justify-center">
+                                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Delight or admiration</div>
+                                            <div class="text-sm text-slate-700 mt-0.5">"Ooh! What a lovely garden!"</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover-card">
+                                        <div class="bg-emerald-100 text-emerald-700 font-bold text-lg w-[80px] h-12 flex items-center justify-center rounded-lg shrink-0">Oh!</div>
+                                        <div class="flex flex-col justify-center">
+                                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Surprise or realization</div>
+                                            <div class="text-sm text-slate-700 mt-0.5">"Oh! Your drawing is amazing!"</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover-card">
+                                        <div class="bg-purple-100 text-purple-700 font-bold text-lg w-[80px] h-12 flex items-center justify-center rounded-lg shrink-0">Aha!</div>
+                                        <div class="flex flex-col justify-center">
+                                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Discovery or realization</div>
+                                            <div class="text-sm text-slate-700 mt-0.5">"Aha! Now I understand why you like this place!"</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover-card">
+                                        <div class="bg-green-100 text-green-700 font-bold text-lg w-[80px] h-12 flex items-center justify-center rounded-lg shrink-0">Hurray!</div>
+                                        <div class="flex flex-col justify-center">
+                                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Joy or celebration</div>
+                                            <div class="text-sm text-slate-700 mt-0.5">"Hurray! We won the competition!"</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover-card">
+                                        <div class="bg-orange-100 text-orange-700 font-bold text-lg w-[80px] h-12 flex items-center justify-center rounded-lg shrink-0">Oops!</div>
+                                        <div class="flex flex-col justify-center">
+                                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">A mistake</div>
+                                            <div class="text-sm text-slate-700 mt-0.5">"Oops! I dropped my book."</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover-card">
+                                        <div class="bg-rose-100 text-rose-700 font-bold text-lg w-[80px] h-12 flex items-center justify-center rounded-lg shrink-0">Ouch!</div>
+                                        <div class="flex flex-col justify-center">
+                                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Pain</div>
+                                            <div class="text-sm text-slate-700 mt-0.5">"Ouch! That hurts!"</div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white p-4 rounded-xl border border-slate-200 shadow-sm flex items-center gap-4 hover-card">
+                                        <div class="bg-slate-200 text-slate-700 font-bold text-lg w-[80px] h-12 flex items-center justify-center rounded-lg shrink-0">Hmm...</div>
+                                        <div class="flex flex-col justify-center">
+                                            <div class="text-[11px] font-bold text-slate-400 uppercase tracking-wider">Thinking / hesitation</div>
+                                            <div class="text-sm text-slate-700 mt-0.5">"Hmm... Let me think about it."</div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div class="bg-amber-50 rounded-2xl p-6 border border-amber-200 mb-8 shadow-sm">
+                                <h4 class="font-bold text-amber-900 text-lg flex items-center gap-2 mb-3"><i class="fas fa-exclamation-triangle text-amber-500"></i> Important:</h4>
+                                <p class="text-amber-900 mb-3">Not all interjections are compliments. For this lesson, students should focus on expressions that naturally introduce or accompany positive reactions.</p>
+                                <p class="text-amber-800 font-medium mb-2">For example:</p>
+                                <ul class="list-disc ml-6 space-y-1 text-amber-900">
+                                    <li>Wow! Your painting is beautiful.</li>
+                                    <li>Ooh! What a lovely cat!</li>
+                                    <li>Oh! Your school has a wonderful garden!</li>
+                                </ul>
+                            </div>
+
+                            <div class="mb-8">
+                                <h3 class="text-2xl font-bold text-navy-900 mb-6">Using Interjections with Compliments</h3>
+                                <p class="text-slate-700 mb-6 text-lg">An interjection can appear before a compliment or an exclamatory sentence.</p>
+
+                                <div class="grid md:grid-cols-3 gap-6">
+                                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-full hover-card">
+                                        <div class="bg-blue-100 text-blue-800 text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-lg self-start mb-4">Pattern 1</div>
+                                        <h4 class="font-bold text-slate-800 text-lg mb-3">Interjection + Compliment</h4>
+                                        <div class="font-mono text-xs bg-slate-50 py-2 px-3 rounded text-slate-600 mb-4 border border-slate-100">Interjection + compliment</div>
+                                        <div class="mt-auto">
+                                            <p class="font-bold text-slate-700 text-sm mb-2">Examples:</p>
+                                            <ul class="list-disc ml-5 space-y-2 text-sm text-slate-600">
+                                                <li>Wow! Your garden is beautiful!</li>
+                                                <li>Ooh! Your bag looks lovely!</li>
+                                                <li>Oh! Your drawing is amazing!</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-full hover-card">
+                                        <div class="bg-accent-100 text-accent-800 text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-lg self-start mb-4">Pattern 2</div>
+                                        <h4 class="font-bold text-slate-800 text-lg mb-3">Interjection + Exclamatory Sentence</h4>
+                                        <div class="font-mono text-xs bg-slate-50 py-2 px-3 rounded text-slate-600 mb-4 border border-slate-100">Interjection + exclamatory sentence</div>
+                                        <div class="mt-auto">
+                                            <p class="font-bold text-slate-700 text-sm mb-2">Examples:</p>
+                                            <ul class="list-disc ml-5 space-y-2 text-sm text-slate-600">
+                                                <li>Wow! What a beautiful garden!</li>
+                                                <li>Ooh! What lovely flowers!</li>
+                                                <li>Oh! How amazing your painting is!</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 flex flex-col h-full hover-card">
+                                        <div class="bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-wider py-1 px-3 rounded-lg self-start mb-4">Pattern 3</div>
+                                        <h4 class="font-bold text-slate-800 text-lg mb-3">Interjection + Question Tag</h4>
+                                        <p class="text-sm text-slate-600 mb-4">Interjections can also be combined with question tags when a speaker reacts to something and seeks confirmation.</p>
+                                        <div class="mt-auto">
+                                            <p class="font-bold text-slate-700 text-sm mb-2">Examples:</p>
+                                            <ul class="list-disc ml-5 space-y-2 text-sm text-slate-600">
+                                                <li>Wow! Your school is beautiful, isn't it?</li>
+                                                <li>Oh! The library is comfortable, isn't it?</li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div class="bg-navy-50 rounded-2xl p-6 border border-navy-100 mt-6 shadow-sm">
+                                    <p class="font-bold text-navy-900 mb-3">However, remember that these structures have different functions:</p>
+                                    <ul class="space-y-2 text-navy-800 text-sm">
+                                        <li><strong class="text-navy-900">Interjection:</strong> Expresses a reaction.</li>
+                                        <li><strong class="text-navy-900">Compliment:</strong> Expresses positive appreciation.</li>
+                                        <li><strong class="text-navy-900">Exclamatory sentence:</strong> Emphasizes a strong feeling.</li>
+                                        <li><strong class="text-navy-900">Question tag:</strong> Asks for confirmation or invites agreement.</li>
+                                    </ul>
+                                </div>
+                            </div>
+
+                            <div class="mb-8">
+                                <h3 class="text-2xl font-bold text-navy-900 mb-6">Using Interjections in Context</h3>
+                                <div class="grid md:grid-cols-2 gap-6">
+                                    
+                                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 shadow-sm">
+                                        <h4 class="font-bold text-slate-700 mb-4 border-b border-slate-200 pb-2 text-sm uppercase tracking-wider">Dialogue 1 — Complimenting a Garden</h4>
+                                        <div class="space-y-3 text-sm">
+                                            <div class="flex items-start gap-2"><span class="font-bold text-blue-700 w-12 shrink-0">Alya:</span> <span class="text-slate-800">This is our school garden.</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-accent-700 w-12 shrink-0">Nadia:</span> <span class="text-slate-800">Wow! What a beautiful garden!</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-blue-700 w-12 shrink-0">Alya:</span> <span class="text-slate-800">Thank you! We take care of it every Friday.</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-accent-700 w-12 shrink-0">Nadia:</span> <span class="text-slate-800">The flowers are colorful, aren't they?</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-blue-700 w-12 shrink-0">Alya:</span> <span class="text-slate-800">Yes, they are.</span></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 shadow-sm">
+                                        <h4 class="font-bold text-slate-700 mb-4 border-b border-slate-200 pb-2 text-sm uppercase tracking-wider">Dialogue 2 — Complimenting a Drawing</h4>
+                                        <div class="space-y-3 text-sm">
+                                            <div class="flex items-start gap-2"><span class="font-bold text-emerald-700 w-12 shrink-0">Rina:</span> <span class="text-slate-800">What do you think of my drawing?</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-purple-700 w-12 shrink-0">Dina:</span> <span class="text-slate-800">Wow! Your drawing is amazing!</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-emerald-700 w-12 shrink-0">Rina:</span> <span class="text-slate-800">Thank you!</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-purple-700 w-12 shrink-0">Dina:</span> <span class="text-slate-800">How carefully you drew the details!</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-emerald-700 w-12 shrink-0">Rina:</span> <span class="text-slate-800">I'm glad you like it.</span></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 shadow-sm">
+                                        <h4 class="font-bold text-slate-700 mb-4 border-b border-slate-200 pb-2 text-sm uppercase tracking-wider">Dialogue 3 — Complimenting a Pet</h4>
+                                        <div class="space-y-3 text-sm">
+                                            <div class="flex items-start gap-2"><span class="font-bold text-blue-700 w-12 shrink-0">Alya:</span> <span class="text-slate-800">This is my cat, Milo.</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-accent-700 w-12 shrink-0">Nadia:</span> <span class="text-slate-800">Ooh! What a cute cat!</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-blue-700 w-12 shrink-0">Alya:</span> <span class="text-slate-800">Thank you. He is very friendly, too.</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-accent-700 w-12 shrink-0">Nadia:</span> <span class="text-slate-800">Really? He looks adorable!</span></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="bg-slate-50 rounded-2xl p-6 border border-slate-200 shadow-sm">
+                                        <h4 class="font-bold text-slate-700 mb-4 border-b border-slate-200 pb-2 text-sm uppercase tracking-wider">Dialogue 4 — Admiring a School Library</h4>
+                                        <div class="space-y-3 text-sm">
+                                            <div class="flex items-start gap-2"><span class="font-bold text-orange-700 w-12 shrink-0">Rafi:</span> <span class="text-slate-800">Have you seen our new library?</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-teal-700 w-12 shrink-0">Dimas:</span> <span class="text-slate-800">Oh! It looks wonderful!</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-orange-700 w-12 shrink-0">Rafi:</span> <span class="text-slate-800">The library is comfortable, isn't it?</span></div>
+                                            <div class="flex items-start gap-2"><span class="font-bold text-teal-700 w-12 shrink-0">Dimas:</span> <span class="text-slate-800">Yes, it is. I especially like the reading corner.</span></div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                            <div>
+                                <h3 class="text-2xl font-bold text-navy-900 mb-4">Choosing Appropriate Interjections</h3>
+                                <p class="text-slate-700 mb-6 text-lg">The best interjection depends on the situation and the speaker's emotion. Consider these examples:</p>
+                                
+                                <div class="bg-white rounded-2xl shadow-sm border border-slate-200 overflow-hidden mb-6">
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-sm text-left text-slate-700">
+                                            <thead class="bg-slate-100 text-slate-800 font-bold border-b border-slate-200">
+                                                <tr>
+                                                    <th class="px-6 py-4">Situation</th>
+                                                    <th class="px-6 py-4 border-l border-slate-200">Appropriate Expression</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100">
+                                                <tr class="hover:bg-slate-50 transition-colors">
+                                                    <td class="px-6 py-4 font-medium">Seeing a beautiful garden</td>
+                                                    <td class="px-6 py-4 border-l border-slate-200 text-blue-700 font-semibold">Wow! What a beautiful garden!</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50 transition-colors">
+                                                    <td class="px-6 py-4 font-medium">Seeing colorful flowers</td>
+                                                    <td class="px-6 py-4 border-l border-slate-200 text-blue-700 font-semibold">Ooh! What lovely flowers!</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50 transition-colors">
+                                                    <td class="px-6 py-4 font-medium">Discovering a new feature in a library</td>
+                                                    <td class="px-6 py-4 border-l border-slate-200 text-blue-700 font-semibold">Oh! I didn't notice that before!</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50 transition-colors">
+                                                    <td class="px-6 py-4 font-medium">Realizing why someone likes a place</td>
+                                                    <td class="px-6 py-4 border-l border-slate-200 text-blue-700 font-semibold">Aha! Now I understand!</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50 transition-colors">
+                                                    <td class="px-6 py-4 font-medium">Celebrating a friend's achievement</td>
+                                                    <td class="px-6 py-4 border-l border-slate-200 text-blue-700 font-semibold">Hurray! You did it!</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                                
+                                <div class="bg-blue-50 rounded-2xl p-6 border border-blue-100 shadow-sm">
+                                    <h4 class="font-bold text-blue-900 mb-2 flex items-center gap-2"><i class="fas fa-chalkboard-teacher text-blue-500"></i> Teaching note:</h4>
+                                    <p class="text-blue-800">In natural English, <strong>Wow!</strong> is especially useful for expressing admiration. <strong>Ooh!</strong> can express delight, while <strong>Oh!</strong> often expresses surprise or realization. Context and intonation influence their meanings.</p>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="tab-summary" class="tab-content hidden">
+                <div class="bg-surface rounded-3xl shadow-xl card-accent-navy border border-slate-100 p-6 md:p-10 relative overflow-hidden">
+                    <i class="fas fa-link absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 text-[20rem] text-slate-50 opacity-20 pointer-events-none z-0"></i>
+                    
+                    <div class="text-center mb-10 relative z-10">
+                        <h2 class="text-3xl font-bold text-navy-900 font-sans tracking-tight">Integrating the Four Language Elements</h2>
+                        <p class="text-slate-500 mt-3 max-w-2xl mx-auto">The purpose of this meeting is not merely to memorize expressions. Students must learn how to combine them naturally in a conversation.</p>
+                    </div>
+
+                    <div class="space-y-12 relative z-10">
+                        
+                        <div class="bg-indigo-50 p-5 rounded-2xl border border-indigo-100 flex items-start gap-4 shadow-sm">
+                            <i class="fas fa-lightbulb text-indigo-500 text-xl mt-1"></i>
+                            <p class="text-indigo-900">Consider the following dialogues to see how interjections, compliments, exclamatory sentences, and question tags work together in everyday situations.</p>
+                        </div>
+
+                        <!-- Model Dialogue 1 -->
+                        <div class="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden hover-card">
+                            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-blue-100 flex items-center justify-center text-blue-600 shadow-sm"><i class="fas fa-user-friends text-lg"></i></div>
+                                <div>
+                                    <h3 class="font-bold text-slate-800 text-lg leading-tight">Model Dialogue 1: Admiring My Mother</h3>
+                                    <p class="text-xs font-medium text-slate-500 mt-0.5">Situation: Two friends are talking about their mothers.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid lg:grid-cols-2">
+                                <div class="p-6 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 space-y-4 text-sm md:text-base">
+                                    <div class="flex items-start gap-3"><span class="font-bold text-blue-700 w-12 shrink-0">Rina:</span> <span class="text-slate-700">Look at this picture of my mother!</span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-accent-700 w-12 shrink-0">Dina:</span> <span><span class="bg-yellow-100/80 px-1.5 py-0.5 rounded text-slate-800 font-semibold border border-yellow-200">Wow!</span> <span class="bg-blue-50 px-1.5 py-0.5 rounded text-slate-800 border border-blue-100">What a beautiful woman she is!</span></span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-blue-700 w-12 shrink-0">Rina:</span> <span class="text-slate-700">Thank you! She is very kind and patient.</span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-accent-700 w-12 shrink-0">Dina:</span> <span class="bg-emerald-50 px-1.5 py-0.5 rounded text-slate-800 border border-emerald-100">She is a teacher, isn't she?</span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-blue-700 w-12 shrink-0">Rina:</span> <span class="text-slate-700">Yes, she is. She teaches English at a junior high school.</span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-accent-700 w-12 shrink-0">Dina:</span> <span><span class="bg-yellow-100/80 px-1.5 py-0.5 rounded text-slate-800 font-semibold border border-yellow-200">Oh, that's wonderful!</span> <span class="bg-emerald-50 px-1.5 py-0.5 rounded text-slate-800 border border-emerald-100">She must be a hardworking person, mustn't she?</span></span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-blue-700 w-12 shrink-0">Rina:</span> <span class="text-slate-700">Yes, she is. She always helps her students.</span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-accent-700 w-12 shrink-0">Dina:</span> <span><span class="bg-yellow-100/80 px-1.5 py-0.5 rounded text-slate-800 font-semibold border border-yellow-200">Aww!</span> <span class="bg-blue-50 px-1.5 py-0.5 rounded text-slate-800 border border-blue-100">How lucky you are to have such a caring mother!</span></span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-blue-700 w-12 shrink-0">Rina:</span> <span class="text-slate-700">Thank you. I really admire her.</span></div>
+                                </div>
+                                <div class="p-6 bg-slate-50 flex flex-col">
+                                    <h4 class="font-bold text-slate-700 mb-3 uppercase text-sm tracking-wider flex items-center gap-2"><i class="fas fa-microscope text-slate-400"></i> Analysis of the Dialogue</h4>
+                                    <div class="overflow-x-auto bg-white rounded-xl border border-slate-200 shadow-sm">
+                                        <table class="w-full text-sm text-left text-slate-700">
+                                            <thead class="bg-slate-100 text-slate-800 font-bold border-b border-slate-200">
+                                                <tr>
+                                                    <th class="px-4 py-3 whitespace-nowrap">Language Element</th>
+                                                    <th class="px-4 py-3 border-l border-slate-200">Example from the Dialogue</th>
+                                                    <th class="px-4 py-3 border-l border-slate-200">Function</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100">
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-yellow-50/30 whitespace-nowrap">Interjection</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Wow!</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Expressing admiration</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-blue-50/30 whitespace-nowrap">Exclamatory sentence</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">What a beautiful woman she is!</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Expressing admiration</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-emerald-50/30 whitespace-nowrap">Question tag</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">She is a teacher, isn't she?</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Confirming information</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-yellow-50/30 whitespace-nowrap">Interjection</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Oh, that's wonderful!</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Expressing a positive reaction</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-emerald-50/30 whitespace-nowrap">Question tag</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">She must be a hardworking person, mustn't she?</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Confirming an opinion</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-yellow-50/30 whitespace-nowrap">Interjection</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Aww!</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Expressing affection</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-blue-50/30 whitespace-nowrap">Exclamatory sentence</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">How lucky you are to have such a caring mother!</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Expressing admiration</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    <div class="mt-4 bg-amber-50 p-4 rounded-xl border border-amber-200 text-sm shadow-sm relative overflow-hidden">
+                                        <div class="absolute right-0 top-0 w-8 h-full bg-amber-100/50 rounded-r-xl"></div>
+                                        <p class="text-amber-900 relative z-10"><strong class="flex items-center gap-2 mb-2 text-base"><i class="fas fa-exclamation-triangle text-amber-500"></i> Grammar correction:</strong> 
+                                        In the model dialogue, the correct question tag for <span class="italic bg-white/50 px-1 rounded">She must be a hardworking person</span> is <span class="font-bold bg-white/60 px-1 rounded">mustn't she?</span>, not <span class="italic bg-white/50 px-1 rounded line-through text-amber-700/70">isn't she?</span>, because the statement uses the modal verb <strong class="text-amber-700 underline underline-offset-2">must</strong>.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Model Dialogue 2 -->
+                        <div class="bg-white border border-slate-200 rounded-3xl shadow-sm overflow-hidden hover-card">
+                            <div class="bg-slate-50 px-6 py-4 border-b border-slate-200 flex items-center gap-3">
+                                <div class="w-10 h-10 rounded-full bg-emerald-100 flex items-center justify-center text-emerald-600 shadow-sm"><i class="fas fa-palette text-lg"></i></div>
+                                <div>
+                                    <h3 class="font-bold text-slate-800 text-lg leading-tight">Model Dialogue 2: Admiring a Friend's Artwork</h3>
+                                    <p class="text-xs font-medium text-slate-500 mt-0.5">Situation: A student shows a painting to a friend.</p>
+                                </div>
+                            </div>
+                            
+                            <div class="grid lg:grid-cols-2">
+                                <div class="p-6 bg-white border-b lg:border-b-0 lg:border-r border-slate-200 space-y-4 text-sm md:text-base">
+                                    <div class="flex items-start gap-3"><span class="font-bold text-emerald-700 w-12 shrink-0">Alya:</span> <span class="text-slate-700">Look at my painting!</span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-orange-700 w-12 shrink-0">Nadia:</span> <span><span class="bg-yellow-100/80 px-1.5 py-0.5 rounded text-slate-800 font-semibold border border-yellow-200">Wow!</span> <span class="bg-blue-50 px-1.5 py-0.5 rounded text-slate-800 border border-blue-100">What a beautiful painting it is!</span></span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-emerald-700 w-12 shrink-0">Alya:</span> <span class="text-slate-700">Thank you! I made it yesterday.</span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-orange-700 w-12 shrink-0">Nadia:</span> <span class="bg-emerald-50 px-1.5 py-0.5 rounded text-slate-800 border border-emerald-100">You used many colors, didn't you?</span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-emerald-700 w-12 shrink-0">Alya:</span> <span class="text-slate-700">Yes, I did. I wanted to make it look bright.</span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-orange-700 w-12 shrink-0">Nadia:</span> <span><span class="bg-yellow-100/80 px-1.5 py-0.5 rounded text-slate-800 font-semibold border border-yellow-200">Oh!</span> <span class="bg-blue-50 px-1.5 py-0.5 rounded text-slate-800 border border-blue-100">How creative you are!</span></span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-emerald-700 w-12 shrink-0">Alya:</span> <span class="text-slate-700">Thank you. I really enjoy painting.</span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-orange-700 w-12 shrink-0">Nadia:</span> <span><span class="bg-yellow-100/80 px-1.5 py-0.5 rounded text-slate-800 font-semibold border border-yellow-200">Aww!</span> <span class="text-slate-700">You should join the school art competition.</span></span></div>
+                                    <div class="flex items-start gap-3"><span class="font-bold text-emerald-700 w-12 shrink-0">Alya:</span> <span class="text-slate-700">That's a great idea!</span></div>
+                                </div>
+                                <div class="p-6 bg-slate-50 flex flex-col">
+                                    <h4 class="font-bold text-slate-700 mb-3 uppercase text-sm tracking-wider flex items-center gap-2"><i class="fas fa-microscope text-slate-400"></i> Analysis of the Dialogue</h4>
+                                    <div class="overflow-x-auto bg-white rounded-xl border border-slate-200 shadow-sm flex-grow">
+                                        <table class="w-full text-sm text-left text-slate-700">
+                                            <thead class="bg-slate-100 text-slate-800 font-bold border-b border-slate-200">
+                                                <tr>
+                                                    <th class="px-4 py-3 whitespace-nowrap">Language Element</th>
+                                                    <th class="px-4 py-3 border-l border-slate-200">Example</th>
+                                                    <th class="px-4 py-3 border-l border-slate-200">Function</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-slate-100">
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-yellow-50/30 whitespace-nowrap">Interjection</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Wow!</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Expressing admiration</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-blue-50/30 whitespace-nowrap">Exclamatory sentence</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">What a beautiful painting it is!</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Admiring the artwork</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-emerald-50/30 whitespace-nowrap">Question tag</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">You used many colors, didn't you?</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Confirming information</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-yellow-50/30 whitespace-nowrap">Interjection</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Oh!</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Expressing surprise or realization</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-blue-50/30 whitespace-nowrap">Exclamatory sentence</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">How creative you are!</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Praising someone's ability</td>
+                                                </tr>
+                                                <tr class="hover:bg-slate-50/50 transition-colors">
+                                                    <td class="px-4 py-3 font-semibold text-slate-800 bg-yellow-50/30 whitespace-nowrap">Interjection</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Aww!</td>
+                                                    <td class="px-4 py-3 border-l border-slate-200">Expressing a warm reaction</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </main>
+
+        <div class="fixed bottom-0 left-0 right-0 bg-white/90 backdrop-blur-md border-t border-slate-200 p-4 shadow-[0_-10px_40px_rgba(0,0,0,0.05)] z-50 transition-transform duration-500 transform translate-y-full" id="bottom-nav-bar">
+            <div class="max-w-7xl mx-auto flex justify-between items-center px-2 sm:px-6 lg:px-8">
+                <button id="prev-btn" onclick="prevStep()" class="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl text-slate-600 font-bold hover:bg-slate-100 transition-colors disabled:opacity-30 disabled:cursor-not-allowed">
+                    <i class="fas fa-arrow-left"></i> <span class="hidden sm:inline">Previous</span>
+                </button>
+                <div id="nav-progress" class="text-xs sm:text-sm font-bold text-slate-400 text-center">
+                    Step <span id="current-step-text" class="text-blue-600">1</span> of 13
+                    <div id="nav-title" class="text-[10px] sm:text-xs font-normal text-slate-500 mt-0.5">Objectives</div>
+                </div>
+                <button id="next-btn" onclick="nextStep()" class="flex items-center gap-2 px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-blue-600 text-white font-bold hover:bg-blue-700 transition-colors shadow-sm disabled:opacity-30 disabled:cursor-not-allowed">
+                    <span class="hidden sm:inline">Next</span> <i class="fas fa-arrow-right"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const navigationFlow = [
+            { main: 'tab-intro', sub: null, title: 'Objectives' },
+            { main: 'tab-descriptive', sub: null, title: 'Descriptive Text' },
+            { main: 'tab-examples', sub: 'ex-person', title: 'Examples: Person' },
+            { main: 'tab-examples', sub: 'ex-animal', title: 'Examples: Animal' },
+            { main: 'tab-examples', sub: 'ex-place', title: 'Examples: Place' },
+            { main: 'tab-examples', sub: 'ex-thing', title: 'Examples: Thing' },
+            { main: 'tab-tags', sub: 'tag-basics', title: 'Question Tags: Rules & Basics' },
+            { main: 'tab-tags', sub: 'tag-aux', title: 'Question Tags: Auxiliary Verbs' },
+            { main: 'tab-tags', sub: 'tag-conv', title: 'Question Tags: Conversations' },
+            { main: 'tab-compliments', sub: 'comp-general', title: 'Compliments: General' },
+            { main: 'tab-compliments', sub: 'comp-exclamatory', title: 'Compliments: Exclamatory Sentences' },
+            { main: 'tab-compliments', sub: 'comp-interjection', title: 'Compliments: Interjections' },
+            { main: 'tab-summary', sub: null, title: 'Integration' }
+        ];
+
+        function getCurrentFlowIndex() {
+            let activeMain = '';
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                if (!tab.classList.contains('hidden')) activeMain = tab.id;
+            });
+
+            let activeSub = null;
+            if (activeMain === 'tab-examples') {
+                document.querySelectorAll('.example-btn').forEach(btn => {
+                    if (btn.getAttribute('data-active') === 'true') {
+                        activeSub = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                    }
+                });
+            } else if (activeMain === 'tab-tags') {
+                document.querySelectorAll('.tag-sub-btn').forEach(btn => {
+                    if (btn.getAttribute('data-active') === 'true') {
+                        activeSub = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                    }
+                });
+            } else if (activeMain === 'tab-compliments') {
+                document.querySelectorAll('.comp-sub-btn').forEach(btn => {
+                    if (btn.getAttribute('data-active') === 'true') {
+                        activeSub = btn.getAttribute('onclick').match(/'([^']+)'/)[1];
+                    }
+                });
+            }
+
+            const index = navigationFlow.findIndex(step => 
+                step.main === activeMain && (step.sub === activeSub || (!step.sub && !activeSub))
+            );
+            return index !== -1 ? index : 0;
+        }
+
+        function updateNavButtons(index = -1) {
+            if(index === -1) index = getCurrentFlowIndex();
+            const prevBtn = document.getElementById('prev-btn');
+            const nextBtn = document.getElementById('next-btn');
+            const stepText = document.getElementById('current-step-text');
+            const titleText = document.getElementById('nav-title');
+
+            if(prevBtn && nextBtn) {
+                prevBtn.disabled = index === 0;
+                nextBtn.disabled = index === navigationFlow.length - 1;
+                stepText.textContent = index + 1;
+                titleText.textContent = navigationFlow[index].title;
+            }
+        }
+
+        function navigateByFlow(index) {
+            if(index < 0 || index >= navigationFlow.length) return;
+            const step = navigationFlow[index];
+            
+            switchTab(step.main);
+            
+            if (step.sub) {
+                if (step.main === 'tab-examples') {
+                    const btn = document.querySelector(`button[onclick*="${step.sub}"]`);
+                    if(btn) switchExample(step.sub, btn, true); 
+                } else if (step.main === 'tab-tags') {
+                    const btn = document.querySelector(`button[onclick*="${step.sub}"]`);
+                    if(btn) switchTagSub(step.sub, btn, true);
+                } else if (step.main === 'tab-compliments') {
+                    const btn = document.querySelector(`button[onclick*="${step.sub}"]`);
+                    if(btn) switchCompSub(step.sub, btn, true);
+                }
+            }
+
+            updateNavButtons(index);
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function nextStep() {
+            let currentIndex = getCurrentFlowIndex();
+            if (currentIndex < navigationFlow.length - 1) {
+                navigateByFlow(currentIndex + 1);
+            }
+        }
+
+        function prevStep() {
+            let currentIndex = getCurrentFlowIndex();
+            if (currentIndex > 0) {
+                navigateByFlow(currentIndex - 1);
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            const mainApp = document.getElementById('main-app');
+            if (mainApp && !mainApp.classList.contains('hidden')) {
+                if (e.key === 'ArrowRight') {
+                    nextStep();
+                } else if (e.key === 'ArrowLeft') {
+                    prevStep();
+                }
+            }
+        });
+
+        // Transition from Landing Page to Main App
+        function startLearning() {
+            const landingPage = document.getElementById('landing-page');
+            const mainApp = document.getElementById('main-app');
+            const bottomNav = document.getElementById('bottom-nav-bar');
+            
+            landingPage.style.opacity = '0';
+            
+            setTimeout(() => {
+                landingPage.style.display = 'none';
+                mainApp.classList.remove('hidden');
+                
+                // Slight delay to trigger CSS transition
+                setTimeout(() => {
+                    mainApp.style.opacity = '1';
+                    if(bottomNav) bottomNav.classList.remove('translate-y-full');
+                }, 50);
+                
+                // Initialize first example tab
+                renderExampleData('ex-person');
+                updateNavButtons();
+            }, 700);
+        }
+
+        // Main Tab Switching Logic
+        function switchTab(tabId) {
+            // Get all tab contents and nav buttons
+            const tabContents = document.querySelectorAll('.tab-content');
+            const navButtons = document.querySelectorAll('.nav-button');
+            
+            // Hide all contents and remove active class
+            tabContents.forEach(content => {
+                content.classList.add('hidden');
+                content.classList.remove('fade-in');
+            });
+            
+            navButtons.forEach(btn => {
+                btn.classList.remove('active');
+            });
+            
+            // Show targeted tab
+            const targetTab = document.getElementById(tabId);
+            if(targetTab) {
+                targetTab.classList.remove('hidden');
+                // trigger reflow
+                void targetTab.offsetWidth;
+                targetTab.classList.add('fade-in');
+            }
+            
+            // Find and activate the clicked button
+            const activeBtn = Array.from(navButtons).find(btn => btn.getAttribute('onclick').includes(tabId));
+            if(activeBtn) {
+                activeBtn.classList.add('active');
+            }
+            
+            updateNavButtons();
+        }
+
+        // Sub-Tab Logic for Question Tags
+        function switchTagSub(subId, btnElement, skipUpdate = false) {
+            const contents = document.querySelectorAll('.tag-content');
+            const buttons = document.querySelectorAll('.tag-sub-btn');
+            
+            contents.forEach(c => {
+                c.classList.add('hidden');
+                c.classList.remove('fade-in');
+            });
+            
+            buttons.forEach(b => {
+                b.setAttribute('data-active', 'false');
+            });
+            
+            document.getElementById(subId).classList.remove('hidden');
+            document.getElementById(subId).classList.add('fade-in');
+            btnElement.setAttribute('data-active', 'true');
+            
+            if(!skipUpdate) updateNavButtons();
+        }
+
+        // Sub-Tab Logic for Compliments & Interjections
+        function switchCompSub(subId, btnElement, skipUpdate = false) {
+            const contents = document.querySelectorAll('.comp-content');
+            const buttons = document.querySelectorAll('.comp-sub-btn');
+            
+            contents.forEach(c => {
+                c.classList.add('hidden');
+                c.classList.remove('fade-in');
+            });
+            
+            buttons.forEach(b => {
+                b.setAttribute('data-active', 'false');
+            });
+            
+            document.getElementById(subId).classList.remove('hidden');
+            document.getElementById(subId).classList.add('fade-in');
+            btnElement.setAttribute('data-active', 'true');
+            
+            if(!skipUpdate) updateNavButtons();
+        }
+
+        // Examples Data
+        const examplesContent = {
+            'ex-person': {
+                icon: 'fa-user',
+                color: 'blue',
+                title: 'My Best Friend, Sarah',
+                text: `<p class="mb-4 text-slate-700 leading-relaxed">Sarah is my best friend. She is a very kind and cheerful person. She has long, curly brown hair and big brown eyes. She is quite tall and slender.</p>
+                       <p class="mb-4 text-slate-700 leading-relaxed">Sarah loves reading books and playing the guitar. She is always there for me when I need help. She always wears a bright smile on her face, which makes everyone around her feel happy.</p>`,
+                analysis: [
+                    { title: "Identification", desc: "Sarah is my best friend." },
+                    { title: "Appearance", desc: "long, curly brown hair, big brown eyes, tall, slender." },
+                    { title: "Personality", desc: "kind, cheerful." },
+                    { title: "Habit", desc: "loves reading books and playing the guitar." }
+                ]
+            },
+            'ex-animal': {
+                icon: 'fa-paw',
+                color: 'orange',
+                title: 'My Cat, Milo',
+                text: `<p class="mb-4 text-slate-700 leading-relaxed">I have a pet cat named Milo. He is a Persian cat with thick, white fur. His eyes are bright blue and very beautiful.</p>
+                       <p class="mb-4 text-slate-700 leading-relaxed">Milo is very playful and energetic. He loves to chase moving objects and play with yarn. He usually sleeps on my bed during the day. I really love my cat.</p>`,
+                analysis: [
+                    { title: "Identification", desc: "I have a pet cat named Milo." },
+                    { title: "Appearance", desc: "Persian cat, thick white fur, bright blue eyes." },
+                    { title: "Personality", desc: "playful and energetic." },
+                    { title: "Habit", desc: "loves to chase objects, sleeps on my bed." }
+                ]
+            },
+            'ex-place': {
+                icon: 'fa-map-marker-alt',
+                color: 'emerald',
+                title: 'My Bedroom',
+                text: `<p class="mb-4 text-slate-700 leading-relaxed">My bedroom is my favorite place in the house. It is a small but very cozy room. The walls are painted in a calming light blue color.</p>
+                       <p class="mb-4 text-slate-700 leading-relaxed">There is a comfortable bed near the window. Next to the bed, I have a wooden desk where I do my homework. I also have a bookshelf filled with my favorite novels. My bedroom is always clean and tidy.</p>`,
+                analysis: [
+                    { title: "Identification", desc: "My bedroom is my favorite place." },
+                    { title: "Description", desc: "small but cozy, light blue walls." },
+                    { title: "Parts/Items", desc: "comfortable bed, wooden desk, bookshelf." },
+                    { title: "Condition", desc: "clean and tidy." }
+                ]
+            },
+            'ex-thing': {
+                icon: 'fa-box',
+                color: 'purple',
+                title: 'My New Backpack',
+                text: `<p class="mb-4 text-slate-700 leading-relaxed">I have a new backpack for school. It is a large, black canvas backpack with a modern design.</p>
+                       <p class="mb-4 text-slate-700 leading-relaxed">It has three main compartments and two small side pockets for water bottles. The straps are thick and soft, so it is very comfortable to wear. I keep my books, pencil case, and lunchbox inside it.</p>`,
+                analysis: [
+                    { title: "Identification", desc: "I have a new backpack for school." },
+                    { title: "Appearance", desc: "large, black canvas, modern design." },
+                    { title: "Parts", desc: "three main compartments, two side pockets, thick soft straps." },
+                    { title: "Function", desc: "to keep books, pencil case, and lunchbox." }
+                ]
+            }
+        };
+
+        function renderExampleData(id) {
+            const container = document.getElementById('examples-container');
+            const data = examplesContent[id];
+            
+            let analysisHTML = '';
+            data.analysis.forEach((item, index) => {
+                analysisHTML += `
+                    <div class="flex items-start mb-3 bg-white p-3 rounded-xl border border-slate-100 shadow-sm">
+                        <div class="w-6 h-6 rounded-full bg-${data.color}-100 text-${data.color}-600 flex items-center justify-center shrink-0 mr-3 text-xs font-bold mt-0.5">${index + 1}</div>
+                        <div>
+                            <span class="font-bold text-slate-800 text-sm block">${item.title}</span>
+                            <span class="text-xs text-slate-600">${item.desc}</span>
+                        </div>
+                    </div>
+                `;
+            });
+
+            container.innerHTML = `
+                <div class="fade-in bg-white rounded-3xl border border-slate-200 overflow-hidden shadow-lg">
+                    <div class="bg-${data.color}-50 p-6 border-b border-${data.color}-100 flex items-center gap-4">
+                        <div class="w-12 h-12 rounded-full bg-white flex items-center justify-center text-${data.color}-500 shadow-sm text-xl">
+                            <i class="fas ${data.icon}"></i>
+                        </div>
+                        <h3 class="text-2xl font-bold text-slate-800">${data.title}</h3>
+                    </div>
+                    <div class="grid md:grid-cols-2 p-6 md:p-8 gap-8">
+                        <div>
+                            <h4 class="font-bold text-slate-500 uppercase tracking-wider text-sm mb-4 border-b border-slate-100 pb-2">The Text</h4>
+                            ${data.text}
+                        </div>
+                        <div class="bg-slate-50 rounded-2xl p-6 border border-slate-100">
+                            <h4 class="font-bold text-slate-500 uppercase tracking-wider text-sm mb-4">Structure Analysis</h4>
+                            ${analysisHTML}
+                        </div>
+                    </div>
+                </div>
+            `;
+        }
+
+        // Logic for Switching Examples Tab
+        function switchExample(id, btnElement, skipUpdate = false) {
+            // Update active states
+            const buttons = document.querySelectorAll('.example-btn');
+            buttons.forEach(b => b.setAttribute('data-active', 'false'));
+            btnElement.setAttribute('data-active', 'true');
+            
+            // Re-render content
+            renderExampleData(id);
+            
+            if(!skipUpdate) updateNavButtons();
+        }
+    </script>
+</body>
+</html>
