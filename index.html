@@ -76,7 +76,7 @@
       <div class="container">
         <div class="section-heading reveal">
           <div><p class="eyebrow">THE MEDIA LIBRARY</p><h2>Jelajahi Media</h2><p>Pilih media, mulai eksplorasi, dan buat proses belajar lebih hidup.</p></div>
-          <div class="catalog-count"><strong id="visible-count">3</strong><span>media tersedia</span></div>
+          <div class="catalog-count"><strong id="visible-count">0</strong><span>media tersedia</span></div>
         </div>
 
         <div class="catalog-tools reveal">
@@ -88,30 +88,8 @@
           </div>
         </div>
 
-        <div class="media-grid" id="media-grid">
-          <article class="media-card reveal" data-category="language" data-search="question tag challenge english grammar question tags grade 9">
-            <a class="media-image" href="https://media.dwinovia.my.id/questiontag/" target="_blank" rel="noopener noreferrer" aria-label="Buka Question Tag Challenge">
-              <img src="assets/thumbnails/question-tag.png" alt="Thumbnail Question Tag Challenge" loading="lazy">
-              <span class="image-badge">Language Learning</span><span class="image-arrow">↗</span>
-            </a>
-            <div class="media-info"><div class="card-meta"><span class="status-dot"></span> English · Grade 9</div><h3>Question Tag Challenge</h3><p>Latihan interaktif untuk mengasah pemahaman question tags melalui tantangan yang menyenangkan.</p><a class="card-link" href="https://media.dwinovia.my.id/questiontag/" target="_blank" rel="noopener noreferrer">Jelajahi media <span>→</span></a></div>
-          </article>
-          <article class="media-card reveal reveal-delay-1" data-category="language" data-search="describing and admiring things english adjectives description grade 9">
-            <a class="media-image" href="https://media.dwinovia.my.id/describingandadmiringthings/" target="_blank" rel="noopener noreferrer" aria-label="Buka Describing and Admiring Things">
-              <img src="assets/thumbnails/describing-things.png" alt="Thumbnail Describing and Admiring Things" loading="lazy">
-              <span class="image-badge">Language Learning</span><span class="image-arrow">↗</span>
-            </a>
-            <div class="media-info"><div class="card-meta"><span class="status-dot"></span> English · Grade 9</div><h3>Describing and Admiring Things</h3><p>Media belajar untuk mengenali dan menggunakan ungkapan deskripsi serta kekaguman.</p><a class="card-link" href="https://media.dwinovia.my.id/describingandadmiringthings/" target="_blank" rel="noopener noreferrer">Jelajahi media <span>→</span></a></div>
-          </article>
-          <article class="media-card reveal reveal-delay-2" data-category="game" data-search="school adventure educational game interactive adventure learning">
-            <a class="media-image" href="https://media.dwinovia.my.id/schooladventure/" target="_blank" rel="noopener noreferrer" aria-label="Buka School Adventure">
-              <img src="assets/thumbnails/school-adventure.png" alt="Thumbnail School Adventure" loading="lazy">
-              <span class="image-badge">Educational Games</span><span class="image-arrow">↗</span>
-            </a>
-            <div class="media-info"><div class="card-meta"><span class="status-dot"></span> Interactive Game</div><h3>School Adventure</h3><p>Game pembelajaran bernuansa petualangan yang mengajak siswa belajar sambil menjelajah.</p><a class="card-link" href="https://media.dwinovia.my.id/schooladventure/" target="_blank" rel="noopener noreferrer">Jelajahi media <span>→</span></a></div>
-          </article>
-          <div class="empty-state" id="empty-state" hidden><span>⌕</span><h3>Media belum ditemukan</h3><p>Coba kata kunci atau kategori yang berbeda.</p></div>
-        </div>
+        <div class="media-grid" id="media-grid" aria-live="polite"></div>
+        <div class="empty-state" id="empty-state" hidden><span>⌕</span><h3>Media belum ditemukan</h3><p>Coba kata kunci atau kategori yang berbeda.</p></div>
       </div>
     </section>
 
@@ -143,6 +121,7 @@
       <span class="copyright">© <span id="year"></span> DEE Projects</span>
     </div>
   </footer>
+  <script src="media.js"></script>
   <script src="script.js"></script>
 </body>
 </html>

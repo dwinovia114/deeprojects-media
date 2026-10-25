@@ -1,18 +1,12 @@
-# DEE Media Portal
+# DEE Media
 
-Portal publik DEE Media, bagian dari ekosistem DEE Projects.
+Portal katalog publik DEE Media.
 
-## Files
-- `index.html`: structure/content
-- `styles.css`: visual styling
-- `script.js`: search, category filters, mobile navigation and reveal effects
-- `assets/logo/`: DEE monogram and favicon
-- `assets/thumbnails/`: project thumbnails
+## Menambah media
+1. Buat folder aplikasi di root repository, misalnya `quiz-clash/`, dan masukkan file aplikasi publik lengkap.
+2. Unggah thumbnail ke `assets/thumbnails/`.
+3. Tambahkan objek baru ke array `MEDIA_ITEMS` di `media.js`.
+4. Gunakan URL relatif, misalnya `url: "quiz-clash/"`.
+5. Commit perubahan dan tunggu GitHub Pages selesai memperbarui.
 
-## Deploy to GitHub Pages
-Upload the contents of this folder to the root of the `deeprojects-media` repository. Keep GitHub Pages set to branch `main`, folder `/(root)`.
-
-## Before public launch
-The three media cards currently link to the existing `media.dwinovia.my.id` app paths. Review each linked app and ensure it is suitable for public access and does not expose student data or internal school information. If you create public-safe copies under `media.deeprojects.web.id`, update the three card URLs in `index.html` before announcing the portal.
-
-Do not add student records, API keys, tokens, credentials, or other confidential information to this public repository.
+**Penting:** folder aplikasi di paket ini berisi placeholder README, bukan kode aplikasi asli. Salin aplikasi publik yang benar sebelum portal diumumkan. Jangan memasukkan data siswa atau informasi rahasia ke repository publik.
