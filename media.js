@@ -1,21 +1,6 @@
 // Katalog DEE Media. Tambahkan objek baru di array ini untuk menambahkan kartu.
 const MEDIA_ITEMS = [
-  {
-    id: "question-tag-challenge",
-    title: "Question Tag Challenge",
-    description: "Game interaktif untuk berlatih question tags dan menguji pemahaman tata bahasa Inggris.",
-    url: "questiontag/",
-    thumbnail: "assets/thumbnails/question-tag.png",
-    subject: "Bahasa Inggris",
-    grades: ["Kelas 9"],
-    type: "Game",
-    featured: true,
-    latest: false,
-    theme: "dark",
-    symbol: "Q?",
-    status: "active"
-  },
-  {
+   {
     id: "describing-and-admiring-things",
     title: "Describing and Admiring Things",
     description: "Media belajar Bahasa Inggris tentang mendeskripsikan dan mengagumi benda.",
@@ -28,21 +13,6 @@ const MEDIA_ITEMS = [
     latest: false,
     theme: "purple",
     symbol: "Aa",
-    status: "active"
-  },
-  {
-    id: "school-adventure",
-    title: "School Adventure",
-    description: "Game pembelajaran interaktif bertema permainan Mario Bros.",
-    url: "schooladventure/",
-    thumbnail: "assets/thumbnails/school-adventure.png",
-    subject: "Bahasa Inggris",
-    grades: ["Kelas 4"],
-    type: "Game",
-    featured: true,
-    latest: false,
-    theme: "mint",
-    symbol: "✦",
     status: "active"
   },
   {
