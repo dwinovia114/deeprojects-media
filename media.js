@@ -33,7 +33,7 @@ const MEDIA_ITEMS = [
   {
     id: "school-adventure",
     title: "School Adventure",
-    description: "Game pembelajaran interaktif bertema petualangan di lingkungan sekolah.",
+    description: "Game pembelajaran interaktif bertema permainan Mario Bros.",
     url: "schooladventure/",
     thumbnail: "assets/thumbnails/school-adventure.png",
     subject: "Bahasa Inggris",
