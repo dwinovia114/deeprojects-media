@@ -1,0 +1,148 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#182338">
+  <meta name="description" content="Jelajahi media pembelajaran interaktif dan game edukatif dari DEE Projects.">
+  <title>DEE Media — Interactive Learning Experiences</title>
+  <link rel="icon" type="image/png" href="assets/logo/favicon.png">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <div class="container nav-wrap">
+      <a class="brand" href="#home" aria-label="DEE Media, beranda">
+        <span class="brand-mark"><img src="assets/logo/dee-monogram.png" alt=""></span>
+        <span class="brand-text"><strong>DEE</strong> <b>Media</b><small>by DEE Projects</small></span>
+      </a>
+      <button class="menu-toggle" id="menu-toggle" aria-label="Buka navigasi" aria-expanded="false">
+        <span></span><span></span><span></span>
+      </button>
+      <nav class="main-nav" id="main-nav" aria-label="Navigasi utama">
+        <a href="#home" class="nav-link active">Beranda</a>
+        <a href="#explore" class="nav-link">Jelajahi Media</a>
+        <a href="#categories" class="nav-link">Kategori</a>
+        <a href="#about" class="nav-link">Tentang</a>
+      </nav>
+      <a class="button button-primary nav-cta" href="https://deeprojects.web.id/">DEE Projects <span>↗</span></a>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="home">
+      <div class="hero-glow glow-one"></div><div class="hero-glow glow-two"></div>
+      <div class="container hero-grid">
+        <div class="hero-copy reveal">
+          <p class="eyebrow"><span class="eyebrow-dot"></span> DEE PROJECTS · LEARNING MEDIA</p>
+          <h1>Make Learning<br><span>More Interactive.</span></h1>
+          <p class="hero-description">Jelajahi media pembelajaran interaktif dan game edukatif yang dirancang untuk menghadirkan pengalaman belajar yang lebih menarik dan bermakna.</p>
+          <div class="hero-actions">
+            <a class="button button-primary" href="#explore">Jelajahi Media <span>→</span></a>
+            <a class="button button-outline" href="#about">Tentang DEE Media</a>
+          </div>
+          <div class="hero-points">
+            <span><i>✓</i> Interaktif</span><span><i>✓</i> Mudah dijelajahi</span><span><i>✓</i> Berorientasi belajar</span>
+          </div>
+        </div>
+        <div class="hero-visual reveal reveal-delay-2" aria-label="Ilustrasi media pembelajaran digital">
+          <div class="visual-orbit orbit-one"></div><div class="visual-orbit orbit-two"></div>
+          <div class="visual-window">
+            <div class="window-bar"><span></span><span></span><span></span><b>learning.space</b></div>
+            <div class="window-content">
+              <div class="visual-label">LEARN · PLAY · GROW</div>
+              <div class="visual-title">Ideas become<br><strong>experiences.</strong></div>
+              <div class="visual-tiles"><div class="tile tile-blue">Aa<span>Language</span></div><div class="tile tile-yellow">✦<span>Creative</span></div><div class="tile tile-green">✓<span>Practice</span></div></div>
+            </div>
+          </div>
+          <div class="float-chip chip-top"><span class="chip-icon blue-icon">✦</span><span><b>Learn by doing</b><small>Explore new ideas</small></span></div>
+          <div class="float-chip chip-bottom"><span class="chip-icon yellow-icon">▶</span><span><b>Interactive media</b><small>Made for discovery</small></span></div>
+          <div class="visual-spark spark-one">✳</div><div class="visual-spark spark-two">✦</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="intro-strip">
+      <div class="container intro-inner">
+        <div><span class="intro-kicker">EXPLORE THE COLLECTION</span><h2>Belajar, mencoba, dan menemukan hal baru.</h2></div>
+        <p>Temukan media yang sesuai dengan kebutuhan pembelajaranmu.</p>
+      </div>
+    </section>
+
+    <section class="catalog section-pad" id="explore">
+      <div class="container">
+        <div class="section-heading reveal">
+          <div><p class="eyebrow">THE MEDIA LIBRARY</p><h2>Jelajahi Media</h2><p>Pilih media, mulai eksplorasi, dan buat proses belajar lebih hidup.</p></div>
+          <div class="catalog-count"><strong id="visible-count">3</strong><span>media tersedia</span></div>
+        </div>
+
+        <div class="catalog-tools reveal">
+          <label class="search-box" for="media-search"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.8" cy="10.8" r="6.5"></circle><path d="m16 16 4.2 4.2"></path></svg><input id="media-search" type="search" placeholder="Cari nama media atau topik..."></label>
+          <div class="filter-list" role="group" aria-label="Filter kategori">
+            <button class="filter-chip active" data-filter="all">Semua Media</button>
+            <button class="filter-chip" data-filter="language">Language Learning</button>
+            <button class="filter-chip" data-filter="game">Educational Games</button>
+          </div>
+        </div>
+
+        <div class="media-grid" id="media-grid">
+          <article class="media-card reveal" data-category="language" data-search="question tag challenge english grammar question tags grade 9">
+            <a class="media-image" href="https://media.dwinovia.my.id/questiontag/" target="_blank" rel="noopener noreferrer" aria-label="Buka Question Tag Challenge">
+              <img src="assets/thumbnails/question-tag.png" alt="Thumbnail Question Tag Challenge" loading="lazy">
+              <span class="image-badge">Language Learning</span><span class="image-arrow">↗</span>
+            </a>
+            <div class="media-info"><div class="card-meta"><span class="status-dot"></span> English · Grade 9</div><h3>Question Tag Challenge</h3><p>Latihan interaktif untuk mengasah pemahaman question tags melalui tantangan yang menyenangkan.</p><a class="card-link" href="https://media.dwinovia.my.id/questiontag/" target="_blank" rel="noopener noreferrer">Jelajahi media <span>→</span></a></div>
+          </article>
+          <article class="media-card reveal reveal-delay-1" data-category="language" data-search="describing and admiring things english adjectives description grade 9">
+            <a class="media-image" href="https://media.dwinovia.my.id/describingandadmiringthings/" target="_blank" rel="noopener noreferrer" aria-label="Buka Describing and Admiring Things">
+              <img src="assets/thumbnails/describing-things.png" alt="Thumbnail Describing and Admiring Things" loading="lazy">
+              <span class="image-badge">Language Learning</span><span class="image-arrow">↗</span>
+            </a>
+            <div class="media-info"><div class="card-meta"><span class="status-dot"></span> English · Grade 9</div><h3>Describing and Admiring Things</h3><p>Media belajar untuk mengenali dan menggunakan ungkapan deskripsi serta kekaguman.</p><a class="card-link" href="https://media.dwinovia.my.id/describingandadmiringthings/" target="_blank" rel="noopener noreferrer">Jelajahi media <span>→</span></a></div>
+          </article>
+          <article class="media-card reveal reveal-delay-2" data-category="game" data-search="school adventure educational game interactive adventure learning">
+            <a class="media-image" href="https://media.dwinovia.my.id/schooladventure/" target="_blank" rel="noopener noreferrer" aria-label="Buka School Adventure">
+              <img src="assets/thumbnails/school-adventure.png" alt="Thumbnail School Adventure" loading="lazy">
+              <span class="image-badge">Educational Games</span><span class="image-arrow">↗</span>
+            </a>
+            <div class="media-info"><div class="card-meta"><span class="status-dot"></span> Interactive Game</div><h3>School Adventure</h3><p>Game pembelajaran bernuansa petualangan yang mengajak siswa belajar sambil menjelajah.</p><a class="card-link" href="https://media.dwinovia.my.id/schooladventure/" target="_blank" rel="noopener noreferrer">Jelajahi media <span>→</span></a></div>
+          </article>
+          <div class="empty-state" id="empty-state" hidden><span>⌕</span><h3>Media belum ditemukan</h3><p>Coba kata kunci atau kategori yang berbeda.</p></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="categories section-pad" id="categories">
+      <div class="container">
+        <div class="section-heading reveal"><div><p class="eyebrow">FIND YOUR NEXT ACTIVITY</p><h2>Jelajahi berdasarkan kategori</h2><p>Mulai dari latihan bahasa hingga permainan edukatif.</p></div></div>
+        <div class="category-grid">
+          <button class="category-card category-language reveal" data-category-pick="language"><span class="category-icon">Aa</span><span><b>Language Learning</b><small>Latihan dan media bahasa</small></span><span class="category-arrow">→</span></button>
+          <button class="category-card category-games reveal reveal-delay-1" data-category-pick="game"><span class="category-icon">▶</span><span><b>Educational Games</b><small>Belajar melalui permainan</small></span><span class="category-arrow">→</span></button>
+          <button class="category-card category-all reveal reveal-delay-2" data-category-pick="all"><span class="category-icon">✦</span><span><b>Semua Media</b><small>Lihat seluruh koleksi</small></span><span class="category-arrow">→</span></button>
+        </div>
+      </div>
+    </section>
+
+    <section class="about-section" id="about">
+      <div class="container about-panel reveal">
+        <div class="about-mark"><img src="assets/logo/dee-monogram.png" alt="DEE Projects"></div>
+        <div class="about-copy"><p class="eyebrow">PART OF DEE PROJECTS</p><h2>Ideas into meaningful learning experiences.</h2><p>DEE Media merupakan bagian dari ekosistem DEE Projects yang menghadirkan karya digital dengan fokus pada pembelajaran, kreativitas, dan teknologi.</p></div>
+        <a class="button button-light" href="https://deeprojects.web.id/">Tentang DEE Projects <span>↗</span></a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <a class="brand footer-brand" href="#home"><span class="brand-mark"><img src="assets/logo/dee-monogram.png" alt=""></span><span class="brand-text"><strong>DEE</strong> <b>Media</b><small>by DEE Projects</small></span></a>
+      <p>Interactive learning experiences, made meaningful.</p>
+      <div class="footer-links"><a href="https://deeprojects.web.id/">DEE Projects</a><a href="#explore">Explore Media</a></div>
+      <span class="copyright">© <span id="year"></span> DEE Projects</span>
+    </div>
+  </footer>
+  <script src="script.js"></script>
+</body>
+</html>
