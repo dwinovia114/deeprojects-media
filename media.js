@@ -1,5 +1,5 @@
 // Katalog DEE Media. Tambahkan objek baru di array ini untuk menambahkan kartu.
-const MEDIA_ITEMS = [
+window.MEDIA_ITEMS = [
    {
     id: "describing-and-admiring-things",
     title: "Describing and Admiring Things",
