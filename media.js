@@ -45,4 +45,4 @@ window.MEDIA_ITEMS = [
     symbol: "Q?",
     status: "active"
   }, 
-   ];
+];
