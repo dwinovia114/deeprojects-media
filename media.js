@@ -29,5 +29,20 @@ window.MEDIA_ITEMS = [
     theme: "dark",
     symbol: "Q?",
     status: "active"
-  }
-];
+  },
+  {
+    id: "things-in-my-bedroom",
+    title: "Things in My Bedroom",
+    description: "Media pembelajaran interaktif Bahasa Inggris untuk siswa kelas 4 SD yang membantu mengenal kosakata benda-benda di kamar tidur melalui ilustrasi menarik, audio pelafalan, dan permainan edukatif.",
+    url: "thingsinmybedroom/",
+    thumbnail: "assets/thumbnails/things-bedroom.png",
+    subject: "English",
+    grades: ["Kelas 4"],
+    type: "Materi Interactif",
+    featured: true,
+    latest: true,
+    theme: "dark",
+    symbol: "Q?",
+    status: "active"
+  }, 
+   ];
