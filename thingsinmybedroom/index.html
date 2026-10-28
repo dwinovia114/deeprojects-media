@@ -637,10 +637,59 @@
         }
         #view-game #finished-1 h3,
         #view-game #finished-2 h3 { font-size: clamp(26px, 3vw, 42px); }
-        #view-game #finished-1 p:last-child,
-        #view-game #finished-2 p:last-child {
-            font-size: clamp(42px, 5vw, 68px);
-            padding: 16px 24px;
+        /* Hanya skor yang dibuat besar; teks catatan akhir tetap ringkas agar tidak bertumpuk. */
+        #view-game #final-score-1,
+        #view-game #final-score-2 {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: clamp(36px, 4.5vw, 64px);
+            line-height: 1;
+            padding: 12px 24px;
+            margin: 4px 0;
+        }
+        #view-game #finished-note-1,
+        #view-game #finished-note-2 {
+            max-width: 34rem;
+            margin: 14px auto 0;
+            padding: 0 12px;
+            font-size: clamp(13px, 1.15vw, 17px);
+            line-height: 1.45;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+        #view-game #finished-1,
+        #view-game #finished-2 { gap: 2px; }
+        #view-game #next-round-1,
+        #view-game #next-round-2 { margin-top: 14px; flex-shrink: 0; }
+        @keyframes pid-drag-pop {
+            from { transform: scale(.94); }
+            to { transform: scale(1.08); }
+        }
+        .pid-drag-ghost {
+            display: flex !important;
+            align-items: center !important;
+            justify-content: center !important;
+            border: 3px solid #fde047 !important;
+            outline: 2px solid rgba(255,255,255,.95);
+            opacity: 1 !important;
+            filter: saturate(1.18);
+            animation: pid-drag-pop .16s ease-out both;
+            will-change: left, top, transform;
+            pointer-events: none !important;
+        }
+        .pid-drag-source {
+            opacity: .22 !important;
+            transform: scale(.96);
+            filter: saturate(.65);
+        }
+        .word-slot.drag-over {
+            background: #d1fae5 !important;
+            border-color: #10b981 !important;
+            box-shadow: 0 0 0 3px rgba(16,185,129,.25), inset 0 0 0 2px rgba(16,185,129,.15) !important;
+        }
+        @media (prefers-reduced-motion: reduce) {
+            .pid-drag-ghost { animation: none; }
         }
         /* Fullscreen expands the actual game view, not just the browser window. */
         #view-game:fullscreen,
@@ -1355,6 +1404,7 @@
         const ghost = word.cloneNode(true);
         ghost.removeAttribute('id');
         ghost.classList.remove('opacity-30', 'scale-95', 'opacity-40');
+        ghost.classList.add('pid-drag-ghost');
         Object.assign(ghost.style, {
             position: 'fixed',
             left: `${rect.left}px`,
@@ -1363,10 +1413,11 @@
             height: `${rect.height}px`,
             zIndex: String(99990 + activePointerDrags.size),
             pointerEvents: 'none',
-            opacity: '0.94',
-            transform: 'scale(1.04)',
-            boxShadow: '0 12px 28px rgba(15,23,42,.35)',
-            margin: '0'
+            opacity: '1',
+            transform: 'scale(1.08)',
+            boxShadow: '0 16px 34px rgba(15,23,42,.48)',
+            margin: '0',
+            borderRadius: '12px'
         });
         document.body.appendChild(ghost);
 
@@ -1382,7 +1433,7 @@
         };
         activePointerDrags.set(e.pointerId, drag);
         pointerDragGhosts.set(e.pointerId, ghost);
-        word.classList.add('opacity-40');
+        word.classList.add('pid-drag-source');
         movePointerGhost(drag, e.clientX, e.clientY);
 
         // Register listeners once; route each event by pointerId.
@@ -1431,7 +1482,7 @@
         activePointerDrags.delete(pointerId);
         pointerDragGhosts.delete(pointerId);
         if (drag.hoverSlot) drag.hoverSlot.classList.remove('drag-over');
-        if (drag.source) drag.source.classList.remove('opacity-40');
+        if (drag.source) drag.source.classList.remove('opacity-40', 'pid-drag-source');
         if (drag.ghost) drag.ghost.remove();
         if (slot) processWordDrop(slot, drag.id, drag.group);
     }
