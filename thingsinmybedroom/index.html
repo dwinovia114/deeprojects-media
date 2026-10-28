@@ -1140,6 +1140,9 @@
         });
     }
 
+    /* PID/touch drag feedback */
+    document.documentElement.style.setProperty("--pid-drag-touch", "manipulation");
+
     /* ==========================================
        GAME DRAG & DROP — 2 RONDE, 10 KOSAKATA/ TIM
     ========================================== */
@@ -1244,6 +1247,8 @@
             wordEl.innerText = item.en;
             wordEl.addEventListener('dragstart', handleDragStart);
             wordEl.addEventListener('dragend', handleDragEnd);
+            // PID/touch support: native HTML drag-and-drop is unreliable on touchscreens.
+            wordEl.addEventListener('pointerdown', handleWordPointerDown, { passive: false });
             wordBank.appendChild(wordEl);
         });
         startTimer(group);
@@ -1285,52 +1290,150 @@
         e.preventDefault();
         const slot = e.currentTarget;
         slot.classList.remove('drag-over');
-
         const draggedId = e.dataTransfer.getData('text/plain');
         const draggedGroup = e.dataTransfer.getData('group');
+        processWordDrop(slot, draggedId, draggedGroup);
+    }
+
+    // Shared drop logic for mouse drag-and-drop and touch/pointer dragging.
+    function processWordDrop(slot, draggedId, draggedGroup) {
+        if (!slot || !slot.classList.contains('word-slot')) return;
+        slot.classList.remove('drag-over');
         const draggedEl = document.getElementById(draggedId);
-        
         const dropZone = slot.closest('.drop-zone');
+        if (!draggedEl || !dropZone) return;
+
         const dropZoneGroup = dropZone.dataset.group;
         const correctId = dropZone.dataset.id;
 
-        if (!draggedEl) return;
-        
-        // Mencegah silang grup (Grup 1 tidak bisa ke area Grup 2)
-        if (draggedGroup !== dropZoneGroup) {
+        // A team's words can only be placed on that team's board.
+        if (String(draggedGroup) !== String(dropZoneGroup)) {
             draggedEl.classList.add('animate-shake');
             setTimeout(() => draggedEl.classList.remove('animate-shake'), 300);
             return;
         }
 
-        // Mencegah menimpa lubang yang sudah terisi
-        if(slot.children.length > 0 && slot.children[0].classList.contains('word-item')) {
-             draggedEl.classList.add('animate-shake');
-             setTimeout(() => draggedEl.classList.remove('animate-shake'), 300);
-             return;
+        // Do not replace an answer already placed in the slot.
+        if (slot.querySelector('.word-item')) {
+            draggedEl.classList.add('animate-shake');
+            setTimeout(() => draggedEl.classList.remove('animate-shake'), 300);
+            return;
         }
 
         const wordId = draggedEl.dataset.id;
-
-        if (wordId === correctId) {
-            // JAWABAN BENAR
-            slot.innerHTML = ''; 
-            
-            draggedEl.className = 'bg-gradient-to-r from-emerald-400 to-emerald-500 text-white font-black py-1 px-3 rounded-xl w-full h-full flex items-center justify-center shadow-md border border-emerald-300';
-            draggedEl.draggable = false; 
-            
+        if (String(wordId) === String(correctId)) {
+            slot.innerHTML = '';
+            draggedEl.className = 'word-item bg-gradient-to-r from-emerald-400 to-emerald-500 text-white font-black py-1 px-3 rounded-xl w-full h-full flex items-center justify-center shadow-md border border-emerald-300';
+            draggedEl.draggable = false;
+            draggedEl.style.touchAction = 'auto';
             slot.appendChild(draggedEl);
             slot.classList.remove('border-dashed', 'border-slate-300', 'bg-slate-100/50', 'shadow-[inset_0_3px_6px_rgba(0,0,0,0.06)]');
             slot.classList.add('border-emerald-400', 'bg-emerald-50', 'shadow-sm');
-
-            addScore(parseInt(draggedGroup));
+            addScore(parseInt(draggedGroup, 10));
         } else {
-            // JAWABAN SALAH
             draggedEl.classList.add('animate-shake', '!bg-red-500', '!shadow-[0_4px_0_0_#991b1b]');
             setTimeout(() => {
                 draggedEl.classList.remove('animate-shake', '!bg-red-500', '!shadow-[0_4px_0_0_#991b1b]');
             }, 400);
         }
+    }
+
+    // Multi-pointer drag for PID/touchscreens. Each active pointer has its own
+    // drag state and ghost, so two teams can drag at the same time.
+    const activePointerDrags = new Map();
+    const pointerDragGhosts = new Map();
+
+    function handleWordPointerDown(e) {
+        // Keep native HTML drag for mouse users; use Pointer Events for touch/pen.
+        if (e.pointerType === 'mouse' || e.button !== 0) return;
+        const word = e.currentTarget;
+        if (!word || word.draggable === false || word.closest('.word-slot')) return;
+        if (activePointerDrags.has(e.pointerId)) return;
+        e.preventDefault();
+
+        const rect = word.getBoundingClientRect();
+        const ghost = word.cloneNode(true);
+        ghost.removeAttribute('id');
+        ghost.classList.remove('opacity-30', 'scale-95', 'opacity-40');
+        Object.assign(ghost.style, {
+            position: 'fixed',
+            left: `${rect.left}px`,
+            top: `${rect.top}px`,
+            width: `${rect.width}px`,
+            height: `${rect.height}px`,
+            zIndex: String(99990 + activePointerDrags.size),
+            pointerEvents: 'none',
+            opacity: '0.94',
+            transform: 'scale(1.04)',
+            boxShadow: '0 12px 28px rgba(15,23,42,.35)',
+            margin: '0'
+        });
+        document.body.appendChild(ghost);
+
+        const drag = {
+            id: word.id,
+            group: word.dataset.group,
+            pointerId: e.pointerId,
+            offsetX: e.clientX - rect.left,
+            offsetY: e.clientY - rect.top,
+            source: word,
+            ghost,
+            hoverSlot: null
+        };
+        activePointerDrags.set(e.pointerId, drag);
+        pointerDragGhosts.set(e.pointerId, ghost);
+        word.classList.add('opacity-40');
+        movePointerGhost(drag, e.clientX, e.clientY);
+
+        // Register listeners once; route each event by pointerId.
+        if (!window.__bedroomPointerListenersInstalled) {
+            document.addEventListener('pointermove', handlePointerMove, { passive: false });
+            document.addEventListener('pointerup', handlePointerUp, { passive: false });
+            document.addEventListener('pointercancel', handlePointerCancel, { passive: false });
+            window.__bedroomPointerListenersInstalled = true;
+        }
+    }
+
+    function movePointerGhost(drag, x, y) {
+        if (!drag || !drag.ghost) return;
+        drag.ghost.style.left = `${x - drag.offsetX}px`;
+        drag.ghost.style.top = `${y - drag.offsetY}px`;
+    }
+
+    function handlePointerMove(e) {
+        const drag = activePointerDrags.get(e.pointerId);
+        if (!drag) return;
+        e.preventDefault();
+        movePointerGhost(drag, e.clientX, e.clientY);
+        const target = document.elementFromPoint(e.clientX, e.clientY);
+        const slot = target && target.closest ? target.closest('.word-slot') : null;
+        if (drag.hoverSlot && drag.hoverSlot !== slot) drag.hoverSlot.classList.remove('drag-over');
+        drag.hoverSlot = slot;
+        if (slot) slot.classList.add('drag-over');
+    }
+
+    function handlePointerUp(e) {
+        const drag = activePointerDrags.get(e.pointerId);
+        if (!drag) return;
+        e.preventDefault();
+        const target = document.elementFromPoint(e.clientX, e.clientY);
+        const slot = target && target.closest ? target.closest('.word-slot') : null;
+        finishPointerDrag(e.pointerId, slot);
+    }
+
+    function handlePointerCancel(e) {
+        if (activePointerDrags.has(e.pointerId)) finishPointerDrag(e.pointerId, null);
+    }
+
+    function finishPointerDrag(pointerId, slot) {
+        const drag = activePointerDrags.get(pointerId);
+        if (!drag) return;
+        activePointerDrags.delete(pointerId);
+        pointerDragGhosts.delete(pointerId);
+        if (drag.hoverSlot) drag.hoverSlot.classList.remove('drag-over');
+        if (drag.source) drag.source.classList.remove('opacity-40');
+        if (drag.ghost) drag.ghost.remove();
+        if (slot) processWordDrop(slot, drag.id, drag.group);
     }
 
     function startTimer(group) {
